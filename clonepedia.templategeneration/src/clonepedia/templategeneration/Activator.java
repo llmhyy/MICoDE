@@ -1,15 +1,7 @@
 package clonepedia.templategeneration;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
-import clonepedia.util.ImageUI;
 
 /**
  * The activator class controls the plug-in life cycle
