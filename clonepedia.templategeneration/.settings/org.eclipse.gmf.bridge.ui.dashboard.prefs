@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+gmf_dashboard/domainGenerationModel=platform\:/resource/clonepedia.templategeneration/model/template_generation.genmodel
+gmf_dashboard/domainModel=platform\:/resource/clonepedia.templategeneration/model/template_generation.ecore
+gmf_dashboard/generationModel=platform\:/resource/clonepedia.templategeneration/model/template_generation.gmfgen
+gmf_dashboard/graphicalDefinitionModel=platform\:/resource/clonepedia.templategeneration/model/template_generation.gmfgraph
+gmf_dashboard/mappingModel=platform\:/resource/clonepedia.templategeneration/model/template_generation.gmfmap
+gmf_dashboard/toolingDefinitionModel=platform\:/resource/clonepedia.templategeneration/model/template_generation.gmftool

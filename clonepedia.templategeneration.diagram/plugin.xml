@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension point="org.eclipse.team.core.fileTypes" id="repo-ftype">
+      <?gmfgen generated="true"?>
+      <fileTypes type="text" extension="template_model_diagram"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser" id="resource-factory">
+      <?gmfgen generated="true"?>
+      <parser
+         type="template_model_diagram"
+         class="org.eclipse.gmf.runtime.emf.core.resources.GMFResourceFactory">
+      </parser>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors" id="gmf-editor">
+      <?gmfgen generated="true"?>
+      <editor
+         id="template_model.diagram.part.Template_generationDiagramEditorID"
+         name="%editorName"
+         icon="icons/obj16/Template_modelDiagramFile.gif"
+         extensions="template_model_diagram"
+         default="true"
+         class="template_model.diagram.part.Template_generationDiagramEditor"
+         matchingStrategy="template_model.diagram.part.Template_generationMatchingStrategy"
+         contributorClass="template_model.diagram.part.Template_generationDiagramActionBarContributor">
+      </editor>
+   </extension>
+   
+   <extension point="org.eclipse.ui.contexts" id="ui-context">
+      <?gmfgen generated="true"?>
+      <context
+         description="%context.description"
+         id="template_model.diagram.ui.diagramContext"
+         name="%context.name"
+         parentId="org.eclipse.gmf.runtime.diagram.ui.diagramContext">
+      </context>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards" id="creation-wizard">
+      <?gmfgen generated="true"?>
+  	  <wizard
+  	     name="%newWizardName"
+  	     icon="icons/obj16/Template_modelDiagramFile.gif"
+  	     category="org.eclipse.ui.Examples"
+  	     class="template_model.diagram.part.Template_generationCreationWizard"
+  	     id="template_model.diagram.part.Template_generationCreationWizardID">
+  	  	 <description>%newWizardDesc</description>  
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.popupMenus" id="init-diagram-action">
+      <?gmfgen generated="true"?>
+      <objectContribution
+            id="clonepedia.templategeneration.diagram.InitDiagram"
+            nameFilter="*.template_model"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               label="%initDiagramActionLabel"
+               class="template_model.diagram.part.Template_generationInitDiagramFileAction"
+               menubarPath="additions"
+               enablesFor="1"
+               id="clonepedia.templategeneration.diagram.InitDiagramAction">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="clonepedia.templategeneration.diagram.classEdit"
+            objectClass="template_model.diagram.edit.parts.ClassEditPart">
+         <action
+               class="clonepedia.templategeneration.diagram.action.ConfigureAction"
+               id="clonepedia.templategeneration.diagram.action2"
+               label="Configure">
+         </action>
+         <action
+               class="clonepedia.templategeneration.diagram.action.ShowSupportingMethodsAction"
+               id="clonepedia.templategeneration.diagram.action1"
+               label="Show Supporting Types">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="clonepedia.templategeneration.diagram.methodEdit"
+            objectClass="template_model.diagram.edit.parts.Method4EditPart">
+         <action
+               class="clonepedia.templategeneration.diagram.action.ConfigureAction"
+               id="clonepedia.templategeneration.diagram.action2"
+               label="Configure">
+         </action>
+         <action
+               class="clonepedia.templategeneration.diagram.action.ShowSupportingMethodsAction"
+               id="clonepedia.templategeneration.diagram.action1"
+               label="Show Supporting Methods">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="clonepedia.templategeneration.diagram.method3Edit"
+            objectClass="template_model.diagram.edit.parts.Method3EditPart">
+         <action
+               class="clonepedia.templategeneration.diagram.action.ConfigureAction"
+               id="clonepedia.templategeneration.diagram.action2"
+               label="Configure">
+         </action>
+         <action
+               class="clonepedia.templategeneration.diagram.action.ShowSupportingMethodsAction"
+               id="clonepedia.templategeneration.diagram.action1"
+               label="Show Supporting Methods">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="clonepedia.templategeneration.diagram.method5Edit"
+            objectClass="template_model.diagram.edit.parts.Method5EditPart">
+         <action
+               class="clonepedia.templategeneration.diagram.action.ConfigureAction"
+               id="clonepedia.templategeneration.diagram.action2"
+               label="Configure">
+         </action>
+         <action
+               class="clonepedia.templategeneration.diagram.action.ShowSupportingMethodsAction"
+               id="clonepedia.templategeneration.diagram.action1"
+               label="Show Supporting Methods">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="clonepedia.templategeneration.diagram.gencode"
+            objectClass="template_model.diagram.edit.parts.TemplateGraphEditPart">
+         <action
+               class="clonepedia.templategeneration.diagram.action.ValidateGraphAction"
+               id="clonepedia.templategeneration.diagram.action4"
+               label="Validate Graph">
+         </action>
+         <action
+               class="clonepedia.templategeneration.diagram.action.CodeGenerationAction"
+               id="clonepedia.templategeneration.diagram.action1"
+               label="Gemerate Code">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="clonepedia.templategeneration.diagram.fieldEdit2"
+            objectClass="template_model.diagram.edit.parts.Field2EditPart">
+         <action
+               class="clonepedia.templategeneration.diagram.action.ShowSupportingMethodsAction"
+               id="clonepedia.templategeneration.diagram.action1"
+               label="Show Supporting Fields">
+         </action>
+         <action
+               class="clonepedia.templategeneration.diagram.action.ConfigureAction"
+               id="clonepedia.templategeneration.diagram.action2"
+               label="Configure">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="clonepedia.templategeneration.diagram.fieldEdit"
+            objectClass="template_model.diagram.edit.parts.FieldEditPart">
+         <action
+               class="clonepedia.templategeneration.diagram.action.ShowSupportingMethodsAction"
+               id="clonepedia.templategeneration.diagram.action1"
+               label="Show Supporting Fields">
+         </action>
+         <action
+               class="clonepedia.templategeneration.diagram.action.ConfigureAction"
+               id="clonepedia.templategeneration.diagram.action2"
+               label="Configure">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="clonepedia.templategeneration.diagram.class2Edit"
+            objectClass="template_model.diagram.edit.parts.Class2EditPart">
+         <action
+               class="clonepedia.templategeneration.diagram.action.ShowSupportingMethodsAction"
+               id="clonepedia.templategeneration.diagram.action1"
+               label="Show Supporting Types">
+         </action>
+         <action
+               class="clonepedia.templategeneration.diagram.action.ConfigureAction"
+               id="clonepedia.templategeneration.diagram.action2"
+               label="Configure">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="clonepedia.templategeneration.diagram.interfaceEdit"
+            objectClass="template_model.diagram.edit.parts.InterfaceEditPart">
+         <action
+               class="clonepedia.templategeneration.diagram.action.ShowSupportingMethodsAction"
+               id="clonepedia.templategeneration.diagram.action1"
+               label="Show Supporting Types">
+         </action>
+         <action
+               class="clonepedia.templategeneration.diagram.action.ConfigureAction"
+               id="clonepedia.templategeneration.diagram.action2"
+               label="Configure">
+         </action>
+      </objectContribution>
+   </extension>
+	
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders" id="global-actions">
+      <?gmfgen generated="true"?>
+      <GlobalActionHandlerProvider
+         class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramGlobalActionHandlerProvider"
+         id="Template_generationPresentation">
+         <Priority name="Lowest"/>
+         <ViewId id="template_model.diagram.part.Template_generationDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="delete"/>
+            </ElementType>
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.DiagramEditPart">
+               <GlobalActionId actionId="save"/>
+            </ElementType>
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="save">
+               </GlobalActionId>
+            </ElementType>        
+         </ViewId>
+      </GlobalActionHandlerProvider>
+      <GlobalActionHandlerProvider
+         class="org.eclipse.gmf.runtime.diagram.ui.providers.ide.providers.DiagramIDEGlobalActionHandlerProvider"
+         id="Template_generationPresentationIDE">
+         <Priority name="Lowest"/>
+         <ViewId id="template_model.diagram.part.Template_generationDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="bookmark"/>
+            </ElementType>
+         </ViewId>
+      </GlobalActionHandlerProvider>
+      <GlobalActionHandlerProvider
+            class="org.eclipse.gmf.runtime.diagram.ui.render.providers.DiagramUIRenderGlobalActionHandlerProvider"
+            id="Template_generationRender">
+         <Priority name="Lowest"/>
+         <ViewId id="template_model.diagram.part.Template_generationDiagramEditorID">
+            <ElementType class="org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart">
+               <GlobalActionId actionId="cut"/>
+               <GlobalActionId actionId="copy"/>
+               <GlobalActionId actionId="paste"/>
+            </ElementType>
+         </ViewId>
+      </GlobalActionHandlerProvider>
+   </extension>
+
+
+   <extension point="org.eclipse.core.runtime.preferences" id="prefs">
+      <?gmfgen generated="true"?>
+      <initializer class="template_model.diagram.preferences.DiagramPreferenceInitializer"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.preferencePages" id="prefpages">
+      <?gmfgen generated="true"?>
+      <page
+            id="clonepedia.templategeneration.diagram.general"
+            name="MICoDe"
+            class="template_model.diagram.preferences.DiagramGeneralPreferencePage">
+      </page>
+      <page
+            id="clonepedia.templategeneration.diagram.appearance"
+            name="%prefpage.clonepedia.templategeneration.diagram.appearance"
+            category="clonepedia.templategeneration.diagram.general"
+            class="template_model.diagram.preferences.DiagramAppearancePreferencePage">
+      </page>
+      <page
+            id="clonepedia.templategeneration.diagram.connections"
+            name="%prefpage.clonepedia.templategeneration.diagram.connections"
+            category="clonepedia.templategeneration.diagram.general"
+            class="template_model.diagram.preferences.DiagramConnectionsPreferencePage">
+      </page>
+      <page
+            id="clonepedia.templategeneration.diagram.printing"
+            name="%prefpage.clonepedia.templategeneration.diagram.printing"
+            category="clonepedia.templategeneration.diagram.general"
+            class="template_model.diagram.preferences.DiagramPrintingPreferencePage">
+      </page>
+      <page
+            id="clonepedia.templategeneration.diagram.rulersAndGrid"
+            name="%prefpage.clonepedia.templategeneration.diagram.rulersAndGrid"
+            category="clonepedia.templategeneration.diagram.general"
+            class="template_model.diagram.preferences.DiagramRulersAndGridPreferencePage">
+      </page>
+      <page
+            category="clonepedia.templategeneration.diagram.general"
+            class="template_model.diagram.preferences.TemplateGenerationPreferencePage"
+            id="clonepedia.templategeneration.diagram.templateGeneration"
+            name="Template Settings">
+      </page>
+   </extension>
+
+   <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor" id="prop-contrib">
+      <?gmfgen generated="true"?>
+      <propertyContributor
+            contributorId="clonepedia.templategeneration.diagram"
+            labelProvider="template_model.diagram.sheet.Template_generationSheetLabelProvider">
+         <propertyCategory category="domain"/>
+         <propertyCategory category="visual"/>
+         <propertyCategory category="extra"/>
+      </propertyContributor>
+   </extension>
+
+   <extension point="org.eclipse.ui.views.properties.tabbed.propertyTabs" id="proptabs">
+      <?gmfgen generated="true"?>   
+      <propertyTabs contributorId="clonepedia.templategeneration.diagram">
+         <propertyTab
+             category="visual"
+             id="property.tab.AppearancePropertySection"
+             label="%tab.appearance"/>
+          <propertyTab
+             category="visual"
+             id="property.tab.DiagramPropertySection"
+             label="%tab.diagram"/>
+          <propertyTab
+             category="domain"
+             id="property.tab.domain"
+             label="%tab.domain"/>
+      </propertyTabs>
+   </extension>
+
+   <extension point="org.eclipse.ui.views.properties.tabbed.propertySections" id="propsections">
+      <?gmfgen generated="true"?>   
+      <propertySections contributorId="clonepedia.templategeneration.diagram">
+         <propertySection id="property.section.ConnectorAppearancePropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.ConnectionEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.ConnectionAppearancePropertySection" 
+            tab="property.tab.AppearancePropertySection">
+         </propertySection>
+         <propertySection id="property.section.ShapeColorAndFontPropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.ShapeEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.ShapeColorsAndFontsPropertySection" 
+            tab="property.tab.AppearancePropertySection">
+         </propertySection> 
+         <propertySection id="property.section.DiagramColorsAndFontsPropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.DiagramEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.DiagramColorsAndFontsPropertySection" 
+            tab="property.tab.AppearancePropertySection">
+         </propertySection>     
+         <propertySection id="property.section.RulerGridPropertySection" 
+            filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.DiagramEditPartPropertySectionFilter" 
+            class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.grid.RulerGridPropertySection" 
+            tab="property.tab.DiagramPropertySection">
+         </propertySection>     
+         <propertySection
+            id="property.section.domain" 
+            tab="property.tab.domain"
+            class="template_model.diagram.sheet.Template_generationPropertySection">
+            <input type="org.eclipse.gmf.runtime.notation.View"/>
+            <input type="org.eclipse.gef.EditPart"/>
+            <input type="template_model.diagram.navigator.Template_generationAbstractNavigatorItem"/>
+         </propertySection>
+      </propertySections>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.diagram.core.viewProviders" id="view-provider">
+      <?gmfgen generated="true"?>
+      <viewProvider class="template_model.diagram.providers.Template_generationViewProvider">
+         <Priority name="Lowest"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Diagram" semanticHints="Template_generation"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Node" semanticHints="2006,2003,2001,2005,3002,3003,3006,3004,3005,3007"/>
+         <context viewClass="org.eclipse.gmf.runtime.notation.Edge" semanticHints="4006,4007,4008,4010"/>
+      </viewProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders" id="ep-provider">
+      <?gmfgen generated="true"?>
+      <editpartProvider class="template_model.diagram.providers.Template_generationEditPartProvider">
+         <Priority name="Lowest"/>
+         <object class="org.eclipse.gmf.runtime.notation.Diagram" id="generated-diagram">
+            <method name="getType()" value="Template_generation"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-nodes">
+            <method name="getType()" value="2006,2003,2001,2005,3002,3003,3006,3004,3005,3007"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Edge" id="generated-links">
+            <method name="getType()" value="4006,4007,4008,4010"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-labels">
+            <method name="getType()" value="5017,5003,5001,5006,5004,5007,5008,5009,5015,5010,5011,5016"/>
+         </object>
+         <object class="org.eclipse.gmf.runtime.notation.Node" id="generated-compartments">
+            <method name="getType()" value="7003,7002,7004"/>
+         </object>
+         <context views="generated-diagram,generated-nodes,generated-links,generated-labels,generated-compartments"/>
+      </editpartProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.ui.modelingAssistantProviders" id="modelassist-provider">
+      <?gmfgen generated="true"?>
+      <modelingAssistantProvider class="template_model.diagram.providers.Template_generationModelingAssistantProvider">
+         <Priority name="Lowest"/>
+         <object class="template_model.diagram.edit.parts.TemplateGraphEditPart" id="TemplateGraph_1000"/>
+         <object class="template_model.diagram.edit.parts.Field3EditPart" id="Field_2006"/>
+         <object class="template_model.diagram.edit.parts.MethodEditPart" id="Method_2003"/>
+         <object class="template_model.diagram.edit.parts.InterfaceEditPart" id="Interface_2001"/>
+         <object class="template_model.diagram.edit.parts.ClassEditPart" id="Class_2005"/>
+         <object class="template_model.diagram.edit.parts.Method3EditPart" id="Method_3002"/>
+         <object class="template_model.diagram.edit.parts.Method4EditPart" id="Method_3003"/>
+         <object class="template_model.diagram.edit.parts.FieldEditPart" id="Field_3006"/>
+         <object class="template_model.diagram.edit.parts.Class2EditPart" id="Class_3004"/>
+         <object class="template_model.diagram.edit.parts.Method5EditPart" id="Method_3005"/>
+         <object class="template_model.diagram.edit.parts.Field2EditPart" id="Field_3007"/>
+         <context elements="TemplateGraph_1000,Field_2006,Method_2003,Interface_2001,Class_2005,Method_3002,Method_3003,Field_3006,Class_3004,Method_3005,Field_3007"/>
+      </modelingAssistantProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.iconProviders" id="icon-provider">
+      <?gmfgen generated="true"?>
+      <IconProvider class="template_model.diagram.providers.Template_generationIconProvider">
+         <Priority name="Low"/>
+      </IconProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.common.ui.services.parserProviders" id="parser-provider">
+      <?gmfgen generated="true"?>
+      <ParserProvider class="template_model.diagram.providers.Template_generationParserProvider">
+         <Priority name="Lowest"/>
+      </ParserProvider>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.type.core.elementTypes" id="element-types">
+      <?gmfgen generated="true"?>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <metamodelType
+               id="clonepedia.templategeneration.diagram.TemplateGraph_1000"
+               name="%metatype.name.TemplateGraph_1000"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="TemplateGraph"
+               edithelper="template_model.diagram.edit.helpers.TemplateGraphEditHelper">
+            <param name="semanticHint" value="1000"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <metamodelType
+               id="clonepedia.templategeneration.diagram.Field_2006"
+               name="%metatype.name.Field_2006"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Field"
+               edithelper="template_model.diagram.edit.helpers.FieldEditHelper">
+            <param name="semanticHint" value="2006"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <metamodelType
+               id="clonepedia.templategeneration.diagram.Method_2003"
+               name="%metatype.name.Method_2003"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Method"
+               edithelper="template_model.diagram.edit.helpers.MethodEditHelper">
+            <param name="semanticHint" value="2003"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <metamodelType
+               id="clonepedia.templategeneration.diagram.Interface_2001"
+               name="%metatype.name.Interface_2001"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Interface"
+               edithelper="template_model.diagram.edit.helpers.InterfaceEditHelper">
+            <param name="semanticHint" value="2001"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <metamodelType
+               id="clonepedia.templategeneration.diagram.Class_2005"
+               name="%metatype.name.Class_2005"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Class"
+               edithelper="template_model.diagram.edit.helpers.ClassEditHelper">
+            <param name="semanticHint" value="2005"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <specializationType
+               id="clonepedia.templategeneration.diagram.Method_3002"
+               name="%metatype.name.Method_3002"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="clonepedia.templategeneration.diagram.Method_2003"/>
+            <param name="semanticHint" value="3002"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <specializationType
+               id="clonepedia.templategeneration.diagram.Method_3003"
+               name="%metatype.name.Method_3003"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="clonepedia.templategeneration.diagram.Method_2003"/>
+            <param name="semanticHint" value="3003"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <specializationType
+               id="clonepedia.templategeneration.diagram.Field_3006"
+               name="%metatype.name.Field_3006"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="clonepedia.templategeneration.diagram.Field_2006"/>
+            <param name="semanticHint" value="3006"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <specializationType
+               id="clonepedia.templategeneration.diagram.Class_3004"
+               name="%metatype.name.Class_3004"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="clonepedia.templategeneration.diagram.Class_2005"/>
+            <param name="semanticHint" value="3004"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <specializationType
+               id="clonepedia.templategeneration.diagram.Method_3005"
+               name="%metatype.name.Method_3005"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="clonepedia.templategeneration.diagram.Method_2003"/>
+            <param name="semanticHint" value="3005"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <specializationType
+               id="clonepedia.templategeneration.diagram.Field_3007"
+               name="%metatype.name.Field_3007"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType">
+            <specializes id="clonepedia.templategeneration.diagram.Field_2006"/>
+            <param name="semanticHint" value="3007"/>
+         </specializationType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <metamodelType
+               id="clonepedia.templategeneration.diagram.ExtendInterface_4006"
+               name="%metatype.name.ExtendInterface_4006"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="ExtendInterface"
+               edithelper="template_model.diagram.edit.helpers.ExtendInterfaceEditHelper">
+            <param name="semanticHint" value="4006"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <metamodelType
+               id="clonepedia.templategeneration.diagram.Call_4007"
+               name="%metatype.name.Call_4007"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Call"
+               edithelper="template_model.diagram.edit.helpers.CallEditHelper">
+            <param name="semanticHint" value="4007"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <metamodelType
+               id="clonepedia.templategeneration.diagram.Implement_4008"
+               name="%metatype.name.Implement_4008"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="Implement"
+               edithelper="template_model.diagram.edit.helpers.ImplementEditHelper">
+            <param name="semanticHint" value="4008"/>
+         </metamodelType>
+      </metamodel>
+      <metamodel nsURI="http://www.se.fudan.edu.cn/clonepedia">
+         <metamodelType
+               id="clonepedia.templategeneration.diagram.ExtendClass_4010"
+               name="%metatype.name.ExtendClass_4010"
+               kind="org.eclipse.gmf.runtime.emf.type.core.IHintedType"
+               eclass="ExtendClass"
+               edithelper="template_model.diagram.edit.helpers.ExtendClassEditHelper">
+            <param name="semanticHint" value="4010"/>
+         </metamodelType>
+      </metamodel>
+   </extension>
+
+   <extension point="org.eclipse.gmf.runtime.emf.type.core.elementTypeBindings" id="element-types-bindings">
+      <?gmfgen generated="true"?>
+      <clientContext id="clonepedia.templategeneration.diagram.TypeContext">
+         <enablement>
+            <test
+               property="org.eclipse.gmf.runtime.emf.core.editingDomain"
+               value="clonepedia.templategeneration.diagram.EditingDomain"/>
+         </enablement>
+      </clientContext> 
+      <binding context="clonepedia.templategeneration.diagram.TypeContext">
+         <elementType ref="clonepedia.templategeneration.diagram.TemplateGraph_1000"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Field_2006"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Method_2003"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Interface_2001"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Class_2005"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Method_3002"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Method_3003"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Field_3006"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Class_3004"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Method_3005"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Field_3007"/>
+         <elementType ref="clonepedia.templategeneration.diagram.ExtendInterface_4006"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Call_4007"/>
+         <elementType ref="clonepedia.templategeneration.diagram.Implement_4008"/>
+         <elementType ref="clonepedia.templategeneration.diagram.ExtendClass_4010"/>
+         <advice ref="org.eclipse.gmf.runtime.diagram.core.advice.notationDepdendents"/>
+      </binding>
+   </extension>
+	   <extension point="org.eclipse.core.expressions.propertyTesters" id="navigator-proptest.isURIEditorInput">
+      <?gmfgen generated="true"?>
+       <propertyTester
+           id="clonepedia.templategeneration.diagram.URIEditorInputPropertyTester"
+           type="org.eclipse.emf.common.ui.URIEditorInput"
+           namespace="clonepedia.templategeneration.diagram"
+           properties="isURIEditorInput"
+           class="template_model.diagram.part.Template_generationUriEditorInputTester">
+       </propertyTester>
+   </extension>
+
+	   <extension point="org.eclipse.ui.navigator.viewer" id="navigator-viewbinding">
+      <?gmfgen generated="true"?>
+      <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <contentExtension pattern="clonepedia.templategeneration.diagram.resourceContent"/>
+			<contentExtension pattern="clonepedia.templategeneration.diagram.domainResourceContent"/>
+            <contentExtension pattern="clonepedia.templategeneration.diagram.navigatorLinkHelper"/>
+         </includes>
+      </viewerContentBinding>
+      <viewerActionBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <actionExtension pattern="clonepedia.templategeneration.diagram.navigatorActionProvider"/>
+         </includes>
+      </viewerActionBinding>
+   </extension>
+
+   <extension point="org.eclipse.ui.navigator.navigatorContent" id="navigator-content">
+      <?gmfgen generated="true"?>
+      <navigatorContent
+            id="clonepedia.templategeneration.diagram.resourceContent" 
+            name="%navigatorContentName" 
+            priority="normal" 
+            contentProvider="template_model.diagram.navigator.Template_generationNavigatorContentProvider" 
+            labelProvider="template_model.diagram.navigator.Template_generationNavigatorLabelProvider"
+            icon="icons/obj16/Template_modelDiagramFile.gif"
+            activeByDefault="true">
+         <triggerPoints>
+            <or>
+	           <and>
+    	          <instanceof value="org.eclipse.core.resources.IFile"/>
+        	      <test property="org.eclipse.core.resources.extension" value="template_model_diagram"/>
+               </and>
+               <instanceof value="template_model.diagram.navigator.Template_generationAbstractNavigatorItem"/>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <or>
+         	   <instanceof value="template_model.diagram.navigator.Template_generationAbstractNavigatorItem"/>
+            </or>
+         </possibleChildren>
+         <commonSorter 
+               id="clonepedia.templategeneration.diagram.navigatorSorter" 
+               class="template_model.diagram.navigator.Template_generationNavigatorSorter">
+            <parentExpression>
+               <or>
+	              <and>
+    	             <instanceof value="org.eclipse.core.resources.IFile"/>
+        	         <test property="org.eclipse.core.resources.extension" value="template_model_diagram"/>
+                  </and>
+                  <instanceof value="template_model.diagram.navigator.Template_generationAbstractNavigatorItem"/>
+               </or>
+            </parentExpression>
+         </commonSorter>
+      </navigatorContent>
+      <navigatorContent
+            id="clonepedia.templategeneration.diagram.domainResourceContent" 
+            name="%domainNavigatorContentName" 
+            priority="normal" 
+            contentProvider="template_model.diagram.navigator.Template_generationDomainNavigatorContentProvider" 
+            labelProvider="template_model.diagram.navigator.Template_generationDomainNavigatorLabelProvider"
+            icon="icons/obj16/Template_modelDiagramFile.gif"
+            activeByDefault="true">
+         <triggerPoints>
+            <or>
+	           <and>
+    	          <instanceof value="org.eclipse.core.resources.IFile"/>
+        	      <test property="org.eclipse.core.resources.extension" value="template_model"/>
+               </and>
+               <instanceof value="template_model.diagram.navigator.Template_generationDomainNavigatorItem"/>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <instanceof value="template_model.diagram.navigator.Template_generationDomainNavigatorItem"/>
+         </possibleChildren>
+      </navigatorContent>
+      <actionProvider
+            id="clonepedia.templategeneration.diagram.navigatorActionProvider"
+            class="template_model.diagram.navigator.Template_generationNavigatorActionProvider">
+         <enablement>
+            <or>
+               <instanceof value="template_model.diagram.navigator.Template_generationAbstractNavigatorItem"/>
+            </or>
+         </enablement>
+      </actionProvider>
+   </extension>
+   
+	   <extension point="org.eclipse.ui.navigator.linkHelper" id="navigator-linkhelper">
+      <?gmfgen generated="true"?>
+      <linkHelper
+            id="clonepedia.templategeneration.diagram.navigatorLinkHelper"
+            class="template_model.diagram.navigator.Template_generationNavigatorLinkHelper">
+         <editorInputEnablement>
+            <and>
+               <instanceof value="org.eclipse.emf.common.ui.URIEditorInput"/>
+               <test property="clonepedia.templategeneration.diagram.isURIEditorInput"/>
+            </and>
+         </editorInputEnablement>
+         <selectionEnablement>
+            <instanceof value="template_model.diagram.navigator.Template_generationAbstractNavigatorItem"/>
+         </selectionEnablement>
+      </linkHelper>
+   </extension>
+   <extension point="org.eclipse.ui.commands" id="update-cmd">
+      <?gmfgen generated="true"?>
+      <command
+         categoryId="org.eclipse.ui.category.edit"
+         defaultHandler="template_model.diagram.part.Template_generationDiagramUpdateCommand"
+         description="%update.diagram.description"
+         id="template_model.diagram.updateDiagram"
+         name="%update.diagram.name"/>
+   </extension>
+   
+   <extension point="org.eclipse.ui.bindings" id="update-cmd-binding">
+      <?gmfgen generated="true"?>
+      <key 
+         commandId="template_model.diagram.updateDiagram"
+         contextId="template_model.diagram.ui.diagramContext"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         sequence="F5"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.menus" id="context-menus">
+      <?gmfgen generated="true"?>
+      <!-- menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=">
+      </menuContribution>
+      <menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=">
+      </menuContribution -->
+      <menuContribution locationURI="popup:org.eclipse.gmf.runtime.diagram.ui.DiagramEditorContextMenu">
+         <command commandId="clonepedia.templategeneration.diagram.LoadResourceAction">
+            <visibleWhen>
+               <and>
+                  <with variable="activePartId"><equals value="template_model.diagram.part.Template_generationDiagramEditorID"/></with>
+                  <with variable="selection"><iterate ifEmpty="false"> 
+                     <instanceof value="template_model.diagram.edit.parts.TemplateGraphEditPart"/>
+                  </iterate></with>
+               </and>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+
+   <extension point="org.eclipse.ui.commands" id="menu-commands">
+      <?gmfgen generated="true"?>
+      <category id="template_model.diagram.part.Template_generationDiagramEditorID" name="%cmdcategory.name" description="%cmdcategory.desc"/>
+      <command id="clonepedia.templategeneration.diagram.LoadResourceAction"
+         name="Load Resource"
+         categoryId="template_model.diagram.part.Template_generationDiagramEditorID"
+         defaultHandler="template_model.diagram.part.LoadResourceAction"/>
+   </extension>
+
+   <extension point="org.eclipse.ui.handlers" id="menu-handlers">
+      <?gmfgen generated="true"?>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="clonepedia.templategeneration.diagram.category"
+            name="Template Feature"
+            parentCategory="Clonepedia.view_category">
+      </category>
+      <view
+            category="clonepedia.templategeneration.diagram.category"
+            class="clonepedia.templategeneration.diagram.view.FeatureView"
+            icon="icons/view/template_feature.gif"
+            id="clonepedia.templategeneration.diagram.feaure"
+            name="Template Features"
+            restorable="true">
+      </view>
+      <view
+            category="clonepedia.templategeneration.diagram.category"
+            class="clonepedia.templategeneration.diagram.view.ReusableDesignView"
+            icon="icons/view/reusable_design.gif"
+            id="clonepedia.templategeneration.diagram.resuableDesign"
+            name="Resuable Design"
+            restorable="true">
+      </view>
+      <view
+            category="clonepedia.templategeneration.diagram.category"
+            class="clonepedia.templategeneration.diagram.view.TaskView"
+            icon="icons/view/task.png"
+            id="clonepedia.templategeneration.diagram.configureTask"
+            name="Configure Task"
+            restorable="true">
+      </view>
+      <view
+            category="clonepedia.templategeneration.diagram.category"
+            class="clonepedia.templategeneration.diagram.view.PropertyView"
+            icon="icons/view/properties.png"
+            id="clonepedia.templategeneration.diagram.property"
+            name="Property"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.gmf.runtime.diagram.ui.layoutProviders">
+      <layoutProvider
+            class="clonepedia.templategeneration.diagram.layout.TemplateLayoutProvider">
+         <Priority
+               name="High">
+         </Priority>
+      </layoutProvider>
+      <!--
+      <layoutProvider
+            class="org.eclipse.gmf.runtime.diagram.ui.providers.CompositeLeftRightProvider">
+         <Priority
+               name="High">
+         </Priority>
+      </layoutProvider>
+      -->
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="clonepedia.templategeneration.diagram.perspective.TemplatePerspective"
+            icon="icons/perspective/template.gif"
+            id="clonepedia.templategeneration.diagram.template_perspective"
+            name="Template Perspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="clonpedia.template"
+            label="AutoGenCT"
+            visible="true">
+         <menu
+               id="clonepedia.templategeneration.diagram.autoGenCT"
+               label="AutoGenCT">
+            <groupMarker
+                  name="template">
+            </groupMarker>
+         </menu>
+         <action
+               class="clonepedia.templategeneration.diagram.action.TemplateGenerationAction"
+               icon="icons/action/template.gif"
+               id="Clonepedia.TemplateGenerationAction"
+               label="Template Generation"
+               menubarPath="clonepedia.templategeneration.diagram.autoGenCT/template"
+               style="push"
+               toolbarPath="template">
+         </action>
+         <action
+               class="clonepedia.templategeneration.diagram.action.CloneDetectionAction"
+               icon="icons/action/clone_detection.gif"
+               id="clonepedia.templategeneration.diagram.cloneDetection"
+               label="CloneDetection"
+               menubarPath="clonepedia.templategeneration.diagram.autoGenCT/template"
+               style="push"
+               toolbarPath="template"
+               tooltip="Detect Clones from Multiple Applications">
+         </action>
+      </actionSet>
+   </extension>
+
+   <!-- optionally, specify keybindings -->
+</plugin>

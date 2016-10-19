@@ -1,0 +1,52 @@
+<!DOCTYPE template[
+<!ELEMENT template (design+)>
+
+<!ELEMENT design (description, multiset)>
+<!ELEMENT description PCDATA>
+<!ATTLIST design id PCDATA #REQUIRED>
+<!ATTLIST design name PCDATA #REQUIRED>
+
+<!ELEMENT multiset (correspondingSet, abstractElement, callerSets, calleeSets, multiset*)>
+<!ATTLIST multiset id PCDATA #REQUIRED>
+
+<!ELEMENT correspondingSet (programElement+)>
+<!ELEMENT programElement EMPTY>
+<!ATTLIST programElement name PCDATA #REQUIRED>
+<!ATTLIST programElement type PCDATA #REQUIRED>
+<!ATTLIST programElement location PCDATA #REQUIRED>
+<!ATTLIST programElement startLine PCDATA #REQUIRED>
+<!ATTLIST programElement endLine PCDATA #REQUIRED>
+<!ATTLIST programElement applicationLocation PCDATA>
+<!ATTLIST programElement handler PCDATA>
+<!ATTLIST programElement key PCDATA>
+
+<!ELEMENT abstractElement (abstractType|abstractMethod|abstractField)>
+<!ELEMENT abstractType (interface+)>
+<!ATTLIST abstractType name PCDATA #REQUIRED>
+<!ATTLIST abstractType isClass PCDATA #REQUIRED>
+<!ATTLIST abstractType superClass PCDATA #REQUIRED>
+<!ATTLIST abstractType packageName PCDATA #REQUIRED>
+
+<!ELEMENT interface EMPTY>
+<!ATTLIST interface name PCDATA #REQUIRED>
+
+<!ELEMENT abstractMethod (parameter+)>
+<!ATTLIST abstractMethod name PCDATA #REQUIRED>
+<!ATTLIST abstractMethod returnType PCDATA #REQUIRED>
+
+<!ELEMENT parameter EMPTY>
+<!ATTLIST parameter paramType PCDATA #REQUIRED>
+<!ATTLIST parameter paramName PCDATA #REQUIRED>
+
+<!ELEMENT abstractField EMPTY>
+<!ATTLIST abstractField name PCDATA #REQUIRED>
+<!ATTLIST abstractField type PCDATA #REQUIRED>
+
+<!ELEMENT callerSets (callerId+)>
+<!ELEMENT callerId>
+<!ATTLIST callerId id PCDATA #REQUIRED>
+
+<!ELEMENT calleeSets (calleeId+)>
+<!ELEMENT calleeId>
+<!ATTLIST calleeId id PCDATA #REQUIRED>
+]>

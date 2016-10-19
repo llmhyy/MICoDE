@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/clonepedia.templategeneration/src" modelPluginID="clonepedia.templategeneration"
+    modelName="Template_generation" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>template_generation.ecore</foreignModel>
+  <genPackages prefix="Template_model" disposableProviderFactory="true" ecorePackage="template_generation.ecore#/">
+    <genClasses ecoreClass="template_generation.ecore#//TemplateGraph">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference template_generation.ecore#//TemplateGraph/templateMethodGroups"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference template_generation.ecore#//TemplateGraph/elements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference template_generation.ecore#//TemplateGraph/templateFeatureGroups"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference template_generation.ecore#//TemplateGraph/links"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//Method">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Method/calleeMethods"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Method/ownerType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Method/returnType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Method/parameters"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//Element">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Element/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Element/graph"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Element/fullName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Element/isComplete"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Element/supportingElements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Element/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Element/srcFolder"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Element/variationType"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//Class">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Class/superClass"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Class/interfaces"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference template_generation.ecore#//Class/innerClasses"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//Type">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference template_generation.ecore#//Type/methods"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference template_generation.ecore#//Type/fields"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//Interface">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Interface/superInterfaces"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//TMG">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference template_generation.ecore#//TMG/methods"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//TMG/graph"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//TFG">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference template_generation.ecore#//TFG/TMGs"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//TFG/graph"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="template_generation.ecore#//Link">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Link/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Link/isComplete"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Link/variationType"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//Call">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Call/callerMethod"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Call/calleeMethod"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//Implement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Implement/class"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Implement/interface"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//ExtendClass">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//ExtendClass/subClass"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//ExtendClass/superClass"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//ExtendInterface">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//ExtendInterface/subInterface"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//ExtendInterface/superInterface"/>
+    </genClasses>
+    <genClasses ecoreClass="template_generation.ecore#//Field">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference template_generation.ecore#//Field/ownerType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute template_generation.ecore#//Field/type"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

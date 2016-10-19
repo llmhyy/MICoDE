@@ -1,0 +1,9 @@
+<<<<<<< HEAD
+/bin/**/*.class
+/authors.txt
+/all_clusterer
+/tst
+bin/
+=======
+/bin
+>>>>>>> tmp

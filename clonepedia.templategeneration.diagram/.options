@@ -1,0 +1,7 @@
+# Tracing options for the clonepedia.templategeneration.diagram plug-in
+
+# Common issues
+clonepedia.templategeneration.diagram/debug=false
+
+# Visual IDs
+clonepedia.templategeneration.diagram/debug/visualID=false

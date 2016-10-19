@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmftool:ToolRegistry
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gmftool="http://www.eclipse.org/gmf/2005/ToolDefinition">
+  <palette
+      title="template_modelPalette">
+    <tools
+        xsi:type="gmftool:ToolGroup"
+        title="template_model">
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Method"
+          description="Create new Method">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/tool/method.gif"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Class"
+          description="Create new Class">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/tool/class.gif"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Interface"
+          description="Create new Interface">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/tool/interface.gif"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Field"
+          description="Create Field">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/tool/field.gif"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="call"
+          description="Create new Call">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/tool/call.gif"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="implement"
+          description="Create new Implement">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/tool/implement.gif"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="extend class"
+          description="Create new ExtendClass">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/tool/extend_class.gif"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="extend interface"
+          description="Create new ExtendInterface">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/tool/extend_interface.gif"/>
+      </tools>
+    </tools>
+  </palette>
+</gmftool:ToolRegistry>
