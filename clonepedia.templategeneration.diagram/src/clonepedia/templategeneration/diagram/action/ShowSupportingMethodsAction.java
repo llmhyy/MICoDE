@@ -22,6 +22,7 @@ import clonepedia.perspective.CloneDiffPerspective;
 import clonepedia.templategeneration.diagram.util.TemplateDiagramUtil;
 import clonepedia.util.Settings;
 import clonepedia.views.codesnippet.CloneDiffView;
+import clonepedia.views.util.DiffUtil;
 
 public class ShowSupportingMethodsAction extends AbstractActionDelegate implements IObjectActionDelegate{
 
@@ -44,12 +45,17 @@ public class ShowSupportingMethodsAction extends AbstractActionDelegate implemen
 		
 		CloneSetWrapper setWrapper = TemplateDiagramUtil.constructCloneSetFromASTNodeList(ms);
 		try {
-			if(Settings.diffComparisonMode.equals("ASTNode_Based")){
-				setWrapper = new CloneInformationExtractor().extractCounterRelationalDifferencesOfCloneSet(setWrapper);					
-			}
-			else{
-				setWrapper = new CloneInformationExtractor().extractCounterRelationalDifferencesWithinSyntacticBoundary(setWrapper);
-			}
+//			if(Settings.diffComparisonMode.equals("ASTNode_Based")){
+//				setWrapper = new CloneInformationExtractor().extractCounterRelationalDifferencesOfCloneSet(setWrapper);					
+//			}
+//			else{
+//				setWrapper = new CloneInformationExtractor().extractCounterRelationalDifferencesWithinSyntacticBoundary(setWrapper);
+//			}
+			
+			clonepedia.java.model.CloneSetWrapper syntacticSetWrapper = 
+					new clonepedia.java.model.CloneSetWrapper(setWrapper.getCloneSet(), new CompilationUnitPool());
+			setWrapper = DiffUtil.constructDiff(syntacticSetWrapper);
+			
 			CloneDiffView viewpart = (CloneDiffView)(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(CloneDiffPerspective.CLONE_DIFF_VIEW));
 			if(viewpart != null){
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(CloneDiffPerspective.CLONE_DIFF_VIEW);
