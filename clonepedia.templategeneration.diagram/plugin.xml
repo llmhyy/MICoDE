@@ -829,11 +829,11 @@
          point="org.eclipse.ui.actionSets">
       <actionSet
             id="clonpedia.template"
-            label="AutoGenCT"
+            label="MICoDE"
             visible="true">
          <menu
                id="clonepedia.templategeneration.diagram.autoGenCT"
-               label="AutoGenCT">
+               label="MICoDE">
             <groupMarker
                   name="template">
             </groupMarker>
