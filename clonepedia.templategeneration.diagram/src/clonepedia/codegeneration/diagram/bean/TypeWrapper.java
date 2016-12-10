@@ -41,6 +41,8 @@ public class TypeWrapper extends ProgramElementWrapper implements IElement, IEle
 					
 					innerType.setOwnerType(TypeWrapper.this);
 					members.add(innerType);
+					
+					return false;
 				}
 				
 				return true;

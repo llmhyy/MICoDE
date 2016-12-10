@@ -61,7 +61,6 @@ public class TemplateGenerationAction implements IWorkbenchWindowActionDelegate 
 //					}
 					
 //					clearCloneSets();
-//					
 //					ArrayList<Multiset> correspondingTypes = new Corresponder().match(applicationSet);
 					
 					DesignList designs = new DesignBuilder().buildDesign(correspondingTypes);
