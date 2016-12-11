@@ -8,7 +8,7 @@ public class TemplateEvaluator {
 	public void evaluate(){
 		DesignList designList = AutoGenCTSettings.designs;
 		for(TemplateDesign design: designList){
-			
+			System.currentTimeMillis();
 		}
 	}
 }

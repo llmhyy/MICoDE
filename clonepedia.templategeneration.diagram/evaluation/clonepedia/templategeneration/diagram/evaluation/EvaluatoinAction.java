@@ -9,8 +9,9 @@ public class EvaluatoinAction implements IWorkbenchWindowActionDelegate {
 
 	@Override
 	public void run(IAction action) {
-		System.out.println("evaluate");
-
+		TemplateEvaluator evaluator = new TemplateEvaluator();
+		evaluator.evaluate();
+		
 	}
 
 	@Override
