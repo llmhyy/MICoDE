@@ -3,6 +3,7 @@ package clonepedia.codegeneration.diagram.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -16,6 +17,12 @@ public class TemplateDesign implements Serializable{
 	
 	private String name;
 	private String description;
+	
+	/**
+	 * The materials contains the a forest (tree) like structure. The first layer of materials
+	 * contains the top-level elements of containment tree, e.g., classes. The second layer represents
+	 * the contained elements in the top-level elements.  
+	 */
 	private ArrayList<Multiset> materials = new ArrayList<>();
 	
 	public String toString(){
@@ -166,5 +173,25 @@ public class TemplateDesign implements Serializable{
 				iterator.remove();
 			}
 		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<TemplateInstance> resolveTemplateInstance() {
+		
+		/**TODO 
+		 * Here, we need an algorithm to distinguish template instances. The
+		 * basic idea is to identify the top-level types in the same template
+		 * instance. Afterwards, we use containment relation to further identify 
+		 * the corresponding members.
+		 */
+		
+		List<TemplateInstance> list = new ArrayList<>();
+		
+		
+		
+		return null;
 	}
 }
