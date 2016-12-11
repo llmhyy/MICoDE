@@ -120,7 +120,7 @@ public class DesignXMLWriter implements DTDSchema{
 		
 		//add multiset
 		//There should be only one multiset.
-		for(Multiset ms : td.getDesign()){
+		for(Multiset ms : td.getMaterials()){
 			write2multiset(doc, design, ms);
 		}
 	}

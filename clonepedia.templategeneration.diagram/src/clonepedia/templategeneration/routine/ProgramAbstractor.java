@@ -20,7 +20,7 @@ import clonepedia.util.MinerUtil;
 public class ProgramAbstractor {
 	public DesignList abstractTemplate(DesignList designs){
 		for(TemplateDesign design: designs){
-			for(Multiset set: design.getDesign()){
+			for(Multiset set: design.getMaterials()){
 				abstracting(set);
 			}
 		}

@@ -16,15 +16,15 @@ public class TemplateDesign implements Serializable{
 	
 	private String name;
 	private String description;
-	private ArrayList<Multiset> design = new ArrayList<>();
+	private ArrayList<Multiset> materials = new ArrayList<>();
 	
 	public String toString(){
-		return this.design.toString();
+		return this.materials.toString();
 	}
 	
 	public int getAbstractTypeNumber(){
 		int count = 0;
-		for(Multiset multiset: design){
+		for(Multiset multiset: materials){
 			if(multiset.isTypeSet()){
 				count++;
 			}
@@ -34,7 +34,7 @@ public class TemplateDesign implements Serializable{
 	
 	public int getAbstractInnerTypeNumber(){
 		int count = 0;
-		for(Multiset multiset: design){
+		for(Multiset multiset: materials){
 			count += getInnerClassNumber(multiset);
 		}
 		return count;
@@ -53,7 +53,7 @@ public class TemplateDesign implements Serializable{
 	
 	public int getAbstractFieldNumber(){
 		int count = 0;
-		for(Multiset multiset: design){
+		for(Multiset multiset: materials){
 			count += getInnerFieldNumber(multiset);
 		}
 		return count;
@@ -74,7 +74,7 @@ public class TemplateDesign implements Serializable{
 	
 	public int getAbstractMethodNumber(){
 		int count = 0;
-		for(Multiset multiset: design){
+		for(Multiset multiset: materials){
 			count += getInnerMethodNumber(multiset);
 		}
 		return count;
@@ -132,25 +132,25 @@ public class TemplateDesign implements Serializable{
 	/**
 	 * @return the design
 	 */
-	public ArrayList<Multiset> getDesign() {
-		return design;
+	public ArrayList<Multiset> getMaterials() {
+		return materials;
 	}
 	
 	public void add(Multiset multiset){
-		if(!design.contains(multiset)){
-			design.add(multiset);
+		if(!materials.contains(multiset)){
+			materials.add(multiset);
 		}
 	}
 	
 	public void merge(TemplateDesign design){
-		for(Multiset set: design.getDesign()){
-			this.design.add(set);
+		for(Multiset set: design.getMaterials()){
+			this.materials.add(set);
 		}
 	}
 
 	public boolean contains(TemplateDesign independentDesign) {
-		for(Multiset set: independentDesign.getDesign()){
-			if(!this.getDesign().contains(set)){
+		for(Multiset set: independentDesign.getMaterials()){
+			if(!this.getMaterials().contains(set)){
 				return false;
 			}
 		}
@@ -159,10 +159,10 @@ public class TemplateDesign implements Serializable{
 	}
 
 	public void remove(TemplateDesign independentDesign) {
-		Iterator<Multiset> iterator = this.getDesign().iterator();
+		Iterator<Multiset> iterator = this.getMaterials().iterator();
 		while(iterator.hasNext()){
 			Multiset set = iterator.next();
-			if(independentDesign.getDesign().contains(set)){
+			if(independentDesign.getMaterials().contains(set)){
 				iterator.remove();
 			}
 		}

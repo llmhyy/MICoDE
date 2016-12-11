@@ -11,7 +11,7 @@ public class DesignList extends ArrayList<TemplateDesign> {
 	
 	public TemplateDesign findDesignContainingTypeMultiset(String setId){
 		for(TemplateDesign design: this){
-			for(Multiset set: design.getDesign()){
+			for(Multiset set: design.getMaterials()){
 				if(set.getId().equals(setId)){
 					return design;
 				}
@@ -23,7 +23,7 @@ public class DesignList extends ArrayList<TemplateDesign> {
 	
 	public Multiset findMultiset(String setId){
 		for(TemplateDesign design: this){
-			for(Multiset set: design.getDesign()){
+			for(Multiset set: design.getMaterials()){
 				Multiset ms = find(set, setId);
 				if(ms != null){
 					return ms;

@@ -41,7 +41,7 @@ public class DesignBuilder {
 		while(designIter.hasNext()){
 			TemplateDesign design = designIter.next();
 			
-			Iterator<Multiset> iter = design.getDesign().iterator();
+			Iterator<Multiset> iter = design.getMaterials().iterator();
 			while(iter.hasNext()){
 				Multiset multiset = iter.next();
 				cleanUnnecessaryTypeElement(multiset);
@@ -50,7 +50,7 @@ public class DesignBuilder {
 				}
 			}
 			
-			if(design.getDesign().size() == 0){
+			if(design.getMaterials().size() == 0){
 				designIter.remove();
 			}
 		}
@@ -113,7 +113,7 @@ public class DesignBuilder {
 				for(TemplateDesign containingDesign: containingDesignList){
 					containingDesign.remove(independentDesign);
 					
-					if(containingDesign.getDesign().size() == 0){
+					if(containingDesign.getMaterials().size() == 0){
 						oldDesignList.remove(containingDesign);
 					}
 				}
@@ -131,15 +131,15 @@ public class DesignBuilder {
 		 */
 		DesignList finalDesignList = new DesignList();
 		for(TemplateDesign oldDesign: oldDesignList){
-			if(oldDesign.getDesign().size() > 5){
+			if(oldDesign.getMaterials().size() > 5){
 				System.currentTimeMillis();
 				
 			}
 			
-			DesignList testDesignList = createDesignWithDirect(oldDesign.getDesign());
+			DesignList testDesignList = createDesignWithDirect(oldDesign.getMaterials());
 			if(testDesignList.size() > 1 || testDesignList.size() == 0){
 				System.currentTimeMillis();
-				createDesignWithDirect(oldDesign.getDesign());
+				createDesignWithDirect(oldDesign.getMaterials());
 			}
 			
 			finalDesignList.addAll(testDesignList);
@@ -194,7 +194,7 @@ public class DesignBuilder {
 		
 		for(TemplateDesign design: designs){
 			ArrayList<IItem> list = new ArrayList<>();
-			for(Multiset multiset: design.getDesign()){
+			for(Multiset multiset: design.getMaterials()){
 				list.add(multiset);
 			}
 			Transaction transaction = new Transaction(list);
@@ -220,7 +220,7 @@ public class DesignBuilder {
 			increaseMultiset(startNode, design, multisets);
 			designs.add(design);
 			
-			for(Multiset node: design.getDesign()){
+			for(Multiset node: design.getMaterials()){
 				if(!visitedSet.contains(node)){
 					visitedSet.add(node);
 				}
@@ -248,7 +248,7 @@ public class DesignBuilder {
 			
 			list.add(design);
 			
-			for(Multiset n: design.getDesign()){
+			for(Multiset n: design.getMaterials()){
 				if(!visitedSet.contains(n)){
 					visitedSet.add(n);
 				}

@@ -396,7 +396,7 @@ public class ReusableDesignView extends ViewPart {
 				}
 			} else if (parentElement instanceof TemplateDesign) {
 				TemplateDesign design = (TemplateDesign) parentElement;
-				return design.getDesign().toArray(new Multiset[0]);
+				return design.getMaterials().toArray(new Multiset[0]);
 			} else if (parentElement instanceof Multiset) {
 				Multiset set = (Multiset) parentElement;
 				if (set.getSubMultisetList() != null
@@ -552,10 +552,10 @@ public class ReusableDesignView extends ViewPart {
 				if(selection.getFirstElement() instanceof Multiset){
 					Multiset ms = (Multiset)selection.getFirstElement();
 					if(ms.isTypeSet()){
-						design.getDesign().add(ms);
+						design.getMaterials().add(ms);
 						
 						TemplateDesign oldParent = AutoGenCTSettings.designs.findDesignContainingTypeMultiset(ms.getId());
-						oldParent.getDesign().remove(ms);
+						oldParent.getMaterials().remove(ms);
 					}
 				}
 				

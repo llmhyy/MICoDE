@@ -28,7 +28,7 @@ public class DesignDiagramGenerator {
 	public TemplateGraph createModelForDesign(TemplateDesign design) {
 		TemplateGraph graph = Template_modelFactory.eINSTANCE.createTemplateGraph();
 		
-		for(Multiset set: design.getDesign()){
+		for(Multiset set: design.getMaterials()){
 			if(set.isTypeSet()){
 				AbstractType abType = (AbstractType) set.getAbstractElement();
 				Type typeModel = createTypeModel(graph, abType, set);
@@ -48,7 +48,7 @@ public class DesignDiagramGenerator {
 			TemplateDesign design) {
 		
 		ArrayList<Multiset> methodSets = new ArrayList<>();
-		for(Multiset set: design.getDesign()){
+		for(Multiset set: design.getMaterials()){
 			collectMethodSet(methodSets, set);
 		}
 		
