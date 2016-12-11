@@ -857,6 +857,14 @@
                toolbarPath="template"
                tooltip="Detect Clones from Multiple Applications">
          </action>
+         <action
+               class="clonepedia.templategeneration.diagram.evaluation.EvaluatoinAction"
+               id="clonepedia.templategeneration.diagram.evaluateAction"
+               label="Evaluate Template"
+               menubarPath="clonepedia.templategeneration.diagram.autoGenCT/template"
+               style="push"
+               toolbarPath="template">
+         </action>
       </actionSet>
    </extension>
 
