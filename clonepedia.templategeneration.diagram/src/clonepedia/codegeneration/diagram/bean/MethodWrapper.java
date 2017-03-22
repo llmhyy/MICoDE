@@ -1,6 +1,7 @@
 package clonepedia.codegeneration.diagram.bean;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -125,7 +126,6 @@ public class MethodWrapper extends MemberWrapper{
 		/*CompilationUnit unit = (CompilationUnit)methodDeclaration.getRoot();
 		IMethod iMethod = (IMethod) methodDeclaration.resolveBinding().getJavaElement();
 		ASTNode node = unit.findDeclaringNode(iMethod.getKey());*/
-		
 		return methodDeclaration.resolveBinding().getJavaElement().getHandleIdentifier();
 	}
 
@@ -133,5 +133,31 @@ public class MethodWrapper extends MemberWrapper{
 	public String getKey() {
 		IMethod iMethod = (IMethod) methodDeclaration.resolveBinding().getJavaElement();
 		return iMethod.getKey();
+	}
+
+	@Override
+	public boolean equalContent(IElement element) {
+		if (!(element instanceof MethodWrapper)){
+			return false;
+		}
+		MethodWrapper that = (MethodWrapper) element;
+		// Compare the name of owner class name, method name, method return type, and method parameters
+		return this.getOwnerType().equalContent(that.getOwnerType()) 
+				&& this.methodDeclaration.getReturnType2().equals(that.methodDeclaration.getReturnType2())
+				&& this.methodDeclaration.getName().equals(that.methodDeclaration.getName())
+				&& new HashSet<>(this.methodDeclaration.parameters()).equals(new HashSet<>(that.methodDeclaration.parameters()));
+	}
+	
+	@Override
+	public boolean equals(Object element) {
+		if (!(element instanceof MethodWrapper)){
+			return false;
+		}
+		MethodWrapper that = (MethodWrapper) element;
+		// Compare the name of owner class name, method name, method return type, and method parameters
+		return this.getOwnerType().equalContent(that.getOwnerType()) 
+				&& this.methodDeclaration.getReturnType2().equals(that.methodDeclaration.getReturnType2())
+				&& this.methodDeclaration.getName().equals(that.methodDeclaration.getName())
+				&& new HashSet<>(this.methodDeclaration.parameters()).equals(new HashSet<>(that.methodDeclaration.parameters()));
 	}
 }

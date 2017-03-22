@@ -7,4 +7,6 @@ public interface IElement {
 	
 	public Multiset getBelongingMultiset();
 	public void setBelongingMultiset(Multiset multiset);
+	
+	public boolean equalContent(IElement element);
 }

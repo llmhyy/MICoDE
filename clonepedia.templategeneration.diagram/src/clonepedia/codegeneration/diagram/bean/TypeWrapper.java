@@ -401,4 +401,20 @@ public class TypeWrapper extends ProgramElementWrapper implements IElement, IEle
 		IType iType = (IType) typeDeclaration.resolveBinding().getJavaElement();
 		return iType.getKey();
 	}
+
+	@Override
+	public boolean equalContent(IElement element) {
+		if (!(element instanceof TypeWrapper)){
+			return false;
+		}
+		return getName().equals(((TypeWrapper)element).getName());
+	}
+	
+	@Override
+	public boolean equals(Object element) {
+		if (!(element instanceof TypeWrapper)){
+			return false;
+		}
+		return getName().equals(((TypeWrapper)element).getName());
+	}
 }

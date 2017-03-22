@@ -260,4 +260,12 @@ public class Application implements IElement, IElementContainer, Serializable{
 	public void setBelongingMultiset(Multiset multiset) {
 		this.belongingMultiset = multiset;
 	}
+
+	@Override
+	public boolean equalContent(IElement element) {
+		if (!(element instanceof Application)){
+			return false;
+		}
+		return this.getApplicationName().equals(((Application)element).getApplicationName());
+	}
 }

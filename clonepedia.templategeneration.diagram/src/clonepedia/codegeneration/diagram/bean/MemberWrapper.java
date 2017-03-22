@@ -27,8 +27,6 @@ public abstract class MemberWrapper extends ProgramElementWrapper{
 		}
 	}
 	
-	
-	
 	/**
 	 * @return the callerMembers
 	 */

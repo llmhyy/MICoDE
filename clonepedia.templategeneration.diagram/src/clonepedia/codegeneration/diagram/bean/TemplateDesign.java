@@ -2,9 +2,12 @@ package clonepedia.codegeneration.diagram.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
+import edu.ntu.cltk.algo.HungarianAlgo;
 
 
 public class TemplateDesign implements Serializable{
@@ -176,6 +179,136 @@ public class TemplateDesign implements Serializable{
 	}
 
 	/**
+	 * Return the sequence number for the member in a class
+	 * @param sup
+	 * @return
+	 */
+	private ArrayList<int[]> buildGraph(Multiset sup){
+		
+		ArrayList<int[]> graph = new ArrayList<int[]>();
+		
+		for (Multiset sub : sup.getSubMultisetList()){
+			int[] subgraph = new int[sup.size()];
+			for (int i = 0 ; i < subgraph.length; i++)	subgraph[i] = -1;
+			for (IElement ie : sub.getCorrespondingSet()){
+				MemberWrapper mw = (MemberWrapper) ie;
+				int ind = sup.getCorrespondingSet().indexOf(mw.getOwnerType());
+				if (ind > -1){
+					TypeWrapper cla = (TypeWrapper)sup.getCorrespondingSet().get(ind);
+					int num = cla.getMembers().indexOf(mw);
+					if (num > -1){
+						subgraph[ind] = num;
+					}			 
+				}
+			}
+			graph.add(subgraph);
+		}
+		return graph;
+	}
+	/**
+	 * Generate template instance for each multiset
+	 * @param ms
+	 * @return
+	 */
+	public TemplateInstance resolveTemplateInstance(Multiset ms) {
+		ArrayList<int[]> graph = buildGraph(ms);
+		
+		//Remove the instance which do not shared with all instances
+		for (int i = 0 ; i < graph.size();){
+			boolean remove = false;
+			for (int j = 0 ; j < graph.get(i).length; j++){
+				if (graph.get(i)[j] == -1){
+					remove = true;
+					break;
+				}
+			}
+			if (remove){
+				graph.remove(i);
+			}else	i++;
+		}
+		
+		TypeWrapper tw = (TypeWrapper) ms.getCorrespondingSet().get(0);
+		int len = tw.getMembers().size();
+		HungarianAlgo<Integer> ha = new HungarianAlgo<Integer>();
+		for (int i = 1; i < ms.size(); i++){
+			TypeWrapper temp = (TypeWrapper) ms.getCorrespondingSet().get(i);
+			Integer[][] matrix = new Integer[len][temp.getMembers().size()];
+			for (int j = 0; j < graph.size(); j++){
+				int a = graph.get(j)[0];
+				int b = graph.get(j)[i];
+				if (a == -1 || b == -1)	continue;
+				matrix[a][b] = matrix[b][a]	= 1;
+			}
+			int[] match = ha.maximalBipartiteGraphMatching(matrix);
+			for (int j = 0; j < len; j++){
+				if(match[j] == -1){
+					//If the j-th element is not in the match list, we remove the associated connection
+					for (int k = 0 ; k < graph.size(); ){
+						if (graph.get(k)[0] != -1){
+							graph.remove(k);
+						}else	k++;
+					}
+				}else{
+					//Remove the connection if not in the match list
+					for (int k = 0 ; k < graph.size(); ) {
+						if (graph.get(k)[i] != match[j]){
+							graph.remove(k);
+						}else	k++;
+					}
+				}
+			}
+		}
+		
+		TemplateInstance ti = new TemplateInstance();
+		for (int i = 0 ; i < ms.size(); i++){
+			TypeWrapper instance = (TypeWrapper) ms.getCorrespondingSet().get(i);
+			ArrayList<Integer> containedMembers = new ArrayList<Integer>();
+			for (int j = 0 ; j < graph.size(); j++)		containedMembers.add(graph.get(j)[i]);
+		}
+		return ti;
+	}
+	
+	/**
+	 * Find if one string exists in an array
+	 * 
+	 * @param arr
+	 * @param src
+	 * @return
+	 */
+	private boolean findString(String[] arr, String src) {
+		if (arr == null || src == null)	return false;
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i].equals(src)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private double jaccardIndex(String[] sar1, String[] sar2) {
+		if (sar1 == null || sar2 == null)	return 0.0;
+		List<String> conjunctArr = new ArrayList<String>();
+		List<String> disjunctArr = new ArrayList<String>();
+
+		for (int i = 0; i < sar1.length; i++) {
+			if (!disjunctArr.contains(sar1[i])) {
+				disjunctArr.add(sar1[i]);
+			}
+
+			if (!conjunctArr.contains(sar1[i]) && findString(sar2, sar1[i])) {
+				conjunctArr.add(sar1[i]);
+			}
+		}
+
+		for (int i = 0; i < sar2.length; i++) {
+			if (!disjunctArr.contains(sar2[i])) {
+				disjunctArr.add(sar2[i]);
+			}
+		}
+		return 1.0 * conjunctArr.size() / disjunctArr.size();
+	}
+	
+	/**
 	 * 
 	 * @return
 	 */
@@ -188,10 +321,64 @@ public class TemplateDesign implements Serializable{
 		 * the corresponding members.
 		 */
 		
-		List<TemplateInstance> list = new ArrayList<>();
+		List<TemplateInstance> instances = new ArrayList<>();
+		int len = this.materials.size();	
+		System.out.println("#########################################################");
 		
+		for (Multiset ms : this.materials){
+			/*for (Multiset sub : ms.getSubMultisetList()){
+				HashSet<String> hm1 = new HashSet<String>();
+				for (Multiset callee : sub.getCalleeSets()){
+					
+				}
+				for (Multiset caller : sub.getCallerSets()){
+					
+				}
+				for (IElement ele : sub.getCorrespondingSet()){
+					if (ele instanceof MethodWrapper){
+						MethodWrapper mw = (MethodWrapper) ele;
+						hm1.add(mw.toString());
+
+						HashSet hs = null;
+						
+					}
+				}
+			}
+			for (IElement ele : ms.getCorrespondingSet()){
+				TypeWrapper tw = (TypeWrapper) ele;
+				
+				for (ProgramElementWrapper pew : tw.getMembers()){
+					if (pew instanceof MethodWrapper){
+						MethodWrapper mw = (MethodWrapper)pew;
+					}else if (pew instanceof FieldWrapper){
+						
+					}
+				}
+			}
+			
+			System.out.println();*/
+			//TODO: re-implement containedMember method
+			instances.add(resolveTemplateInstance(ms));
+			int[][] similarity = new int[ms.size()][ms.size()]; 
+			for (Multiset sub: ms.getSubMultisetList()){
+				List<Integer> mem = new ArrayList<Integer>();//containedMember(ms, sub);
+				for (int i = 0 ; i < mem.size(); i++){
+					for (int j = i+1; j < mem.size(); j++){
+						similarity[mem.get(i)][mem.get(j)]++;
+						similarity[mem.get(j)][mem.get(i)]++;
+					}
+				}
+			}
+			
+			System.out.println(ms.toString());
+			for (int i = 0; i< ms.size(); i++){
+				for (int j = 0 ; j < ms.size(); j++){
+					System.out.print(similarity[i][j] + " ");
+				}
+				System.out.println();
+			}
+		}
 		
-		
-		return null;
+		return instances;
 	}
 }

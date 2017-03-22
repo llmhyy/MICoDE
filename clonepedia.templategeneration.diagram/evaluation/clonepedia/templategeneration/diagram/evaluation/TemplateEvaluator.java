@@ -1,10 +1,12 @@
 package clonepedia.templategeneration.diagram.evaluation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import clonepedia.codegeneration.diagram.bean.DesignList;
 import clonepedia.codegeneration.diagram.bean.TemplateDesign;
 import clonepedia.codegeneration.diagram.bean.TemplateInstance;
+import clonepedia.codegeneration.diagram.bean.TypeWrapper;
 import template_model.diagram.util.AutoGenCTSettings;
 
 public class TemplateEvaluator {
@@ -37,12 +39,21 @@ public class TemplateEvaluator {
 	}
 
 	private TemplateDesign summarize(List<TemplateInstance> otherInstanceList) {
-		// TODO Auto-generated method stub
+		for (TemplateInstance ti : otherInstanceList){
+			for (TypeWrapper tw : ti.getTopTypeWrapperList()){
+				System.out.println(tw.toString());
+			}
+		}
 		return null;
 	}
 
 	private List<TemplateInstance> findOtherInstance(List<TemplateInstance> instanceList, TemplateInstance instance) {
-		// TODO Auto-generated method stub
-		return null;
+		List<TemplateInstance> copiedInstances = new ArrayList<TemplateInstance>();
+		for (TemplateInstance ti : instanceList){
+			if (instance != null && ti.equals(instance)){
+				copiedInstances.add(instance);
+			}
+		}
+		return copiedInstances;
 	}
 }

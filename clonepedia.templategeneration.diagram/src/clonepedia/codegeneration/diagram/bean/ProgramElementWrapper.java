@@ -144,4 +144,7 @@ public abstract class ProgramElementWrapper implements IElement, Serializable{
 		
 		return (CompilationUnit)parent;
 	}
+	
+	@Override
+	abstract public boolean equals(Object pew);
 }

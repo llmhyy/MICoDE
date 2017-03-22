@@ -98,5 +98,28 @@ public class FieldWrapper extends MemberWrapper{
 		IField iField = (IField) getFirstFragment().resolveBinding().getJavaElement();
 		return iField.getKey();
 	}
+
+	@Override
+	public boolean equalContent(IElement element) {
+		if (!(element instanceof FieldWrapper)){
+			return false;
+		}
+		FieldWrapper that = (FieldWrapper) element;
+		// Compare the name of class name, variable type, and variable name
+		return this.getOwnerType().equalContent(that.getOwnerType()) 
+				&& this.fieldDeclaration.getType().equals(that.fieldDeclaration.getType()) 
+				&& this.getFieldName().equals(that.getFieldName());
+	}
 	
+	@Override
+	public boolean equals(Object element) {
+		if (!(element instanceof FieldWrapper)){
+			return false;
+		}
+		FieldWrapper that = (FieldWrapper) element;
+		// Compare the name of class name, variable type, and variable name
+		return this.getOwnerType().equalContent(that.getOwnerType()) 
+				&& this.fieldDeclaration.getType().equals(that.fieldDeclaration.getType()) 
+				&& this.getFieldName().equals(that.getFieldName());
+	}
 }
