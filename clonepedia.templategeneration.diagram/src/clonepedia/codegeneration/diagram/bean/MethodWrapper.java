@@ -154,9 +154,21 @@ public class MethodWrapper extends MemberWrapper{
 			return false;
 		}
 		MethodWrapper that = (MethodWrapper) element;
+		
+		boolean isReturnTypeEqual = false;
+		if(this.methodDeclaration.getReturnType2()==null && that.methodDeclaration.getReturnType2()==null){
+			isReturnTypeEqual = true;
+		}
+		else if(this.methodDeclaration.getReturnType2()==null){
+			isReturnTypeEqual = false;
+		}
+		else{
+			isReturnTypeEqual = this.methodDeclaration.getReturnType2().equals(that.methodDeclaration.getReturnType2());
+		}
+		
 		// Compare the name of owner class name, method name, method return type, and method parameters
 		return this.getOwnerType().equalContent(that.getOwnerType()) 
-				&& this.methodDeclaration.getReturnType2().equals(that.methodDeclaration.getReturnType2())
+				&& isReturnTypeEqual
 				&& this.methodDeclaration.getName().equals(that.methodDeclaration.getName())
 				&& new HashSet<>(this.methodDeclaration.parameters()).equals(new HashSet<>(that.methodDeclaration.parameters()));
 	}
