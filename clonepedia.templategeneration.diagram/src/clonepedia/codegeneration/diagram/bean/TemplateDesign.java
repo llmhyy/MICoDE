@@ -205,6 +205,10 @@ public class TemplateDesign implements Serializable{
 		}
 		return graph;
 	}
+	public TemplateInstance resolveTemplateInstance2(Multiset ms) {
+		
+		return null;
+	}
 	/**
 	 * Generate template instance for each multiset
 	 * @param ms
@@ -325,7 +329,68 @@ public class TemplateDesign implements Serializable{
 		int len = this.materials.size();	
 		System.out.println("#########################################################");
 		
+		List<TypeWrapper> clazz = new ArrayList<TypeWrapper>();
+		List<MemberWrapper> members = new ArrayList<MemberWrapper>();
 		for (Multiset ms : this.materials){
+			for (IElement ele : ms.getCorrespondingSet()){
+				if (ele instanceof TypeWrapper){
+					TypeWrapper tw = (TypeWrapper)ele;
+					clazz.add(tw);
+					
+					for (ProgramElementWrapper pew : tw.getMembers()){
+						if (pew instanceof MemberWrapper)
+							members.add((MemberWrapper)pew);
+					}
+				
+				}
+			}
+		}
+		
+		
+		for (Multiset ms : this.materials){
+			for (IElement ele : ms.getCorrespondingSet()){
+					
+				HashSet<TypeWrapper> visited = new HashSet<TypeWrapper>();
+					
+				if (ele instanceof TypeWrapper){
+					TypeWrapper tw = (TypeWrapper) ele;
+					if (visited.contains(tw))	continue;
+						
+					List<TypeWrapper> instance = new ArrayList<TypeWrapper>();
+					int pos = 0;
+					for (instance.add(tw), visited.add(tw);pos < instance.size();){
+
+						for (ProgramElementWrapper pew : instance.get(pos).getMembers()){
+							if (pew instanceof MethodWrapper){
+								MethodWrapper mw = (MethodWrapper) pew;
+									
+								for (MemberWrapper callee : mw.getCalleeMembers()){
+									if (members.contains(callee)){
+										TypeWrapper owner = callee.getOwnerType();
+										if (instance.contains(owner) || visited.contains(owner))	continue;
+										visited.add(owner);
+										instance.add(owner);
+									}
+								}
+								
+								for (MemberWrapper caller : mw.getCallerMembers()){
+									if (members.contains(caller)){
+										TypeWrapper owner = caller.getOwnerType();
+										if (instance.contains(owner) || visited.contains(owner))	continue;
+										visited.add(owner);
+										instance.add(owner);
+									}
+								}
+							}
+						}
+					}
+					
+					if (instance.size() > 1)
+						instances.add(new TemplateInstance(instance));
+				}
+			}
+			
+		
 			/*for (Multiset sub : ms.getSubMultisetList()){
 				HashSet<String> hm1 = new HashSet<String>();
 				for (Multiset callee : sub.getCalleeSets()){
@@ -356,7 +421,7 @@ public class TemplateDesign implements Serializable{
 				}
 			}
 			
-			System.out.println();*/
+			System.out.println();
 			//TODO: re-implement containedMember method
 			instances.add(resolveTemplateInstance(ms));
 			int[][] similarity = new int[ms.size()][ms.size()]; 
@@ -376,7 +441,7 @@ public class TemplateDesign implements Serializable{
 					System.out.print(similarity[i][j] + " ");
 				}
 				System.out.println();
-			}
+			}*/
 		}
 		
 		return instances;
