@@ -12,9 +12,15 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
 import org.w3c.dom.Document;
@@ -29,15 +35,19 @@ import clonepedia.codegeneration.diagram.bean.AbstractType;
 import clonepedia.codegeneration.diagram.bean.DesignList;
 import clonepedia.codegeneration.diagram.bean.FieldWrapper;
 import clonepedia.codegeneration.diagram.bean.IElement;
+import clonepedia.codegeneration.diagram.bean.MemberWrapper;
 import clonepedia.codegeneration.diagram.bean.MethodWrapper;
 import clonepedia.codegeneration.diagram.bean.Multiset;
 import clonepedia.codegeneration.diagram.bean.Parameter;
+import clonepedia.codegeneration.diagram.bean.ProgramElementWrapper;
 import clonepedia.codegeneration.diagram.bean.TemplateDesign;
 import clonepedia.codegeneration.diagram.bean.TypeWrapper;
+import clonepedia.templategeneration.diagram.util.JavaUtil;
 
 public class DesignXMLReader implements DTDSchema{
 
 	private static Map<String, TypeWrapper> typeCache = new HashMap<>();
+	private static Map<String, ProgramElementWrapper> memberCache = new HashMap<>();
 	
 	private static Map<String, Multiset> multisetMap = 
 			new HashMap<String, Multiset>();
@@ -137,7 +147,14 @@ public class DesignXMLReader implements DTDSchema{
 			}
 		}
 		
+		replaceAllTypeMembersWithMemberCache(designList);
+		
 		return designList;
+	}
+
+	private static void replaceAllTypeMembersWithMemberCache(DesignList designList) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private static void readDesign(TemplateDesign td, Element designElement) {
@@ -150,7 +167,7 @@ public class DesignXMLReader implements DTDSchema{
 					td.getName());
 			return;
 		}else {
-			Node  descriptionNode = descriptionNodes.get(0);
+			Node descriptionNode = descriptionNodes.get(0);
 			if(descriptionNode.getNodeType()==Node.ELEMENT_NODE){
 				Element descriptionElement = (Element)descriptionNode;
 				td.setDescription(descriptionElement.getTextContent());
@@ -162,7 +179,7 @@ public class DesignXMLReader implements DTDSchema{
 				MULTISET);
 		for(int i=0;i<multisetNodes.size();i++){
 			
-			Node  multisetNode = multisetNodes.get(i);
+			Node multisetNode = multisetNodes.get(i);
 			if(multisetNode.getNodeType()==Node.ELEMENT_NODE){
 				Element multisetElement = (Element)multisetNode;
 				Multiset m = new Multiset();
@@ -394,6 +411,36 @@ public class DesignXMLReader implements DTDSchema{
 			}
 		}
 	}
+	
+	class MemberRetriever extends ASTVisitor{
+		
+		List<MemberWrapper> calledMemberList;
+		
+		public boolean visit(MethodInvocation invocation){
+			IMethodBinding binding = invocation.resolveMethodBinding();
+			ITypeBinding declaringClass = binding.getDeclaringClass();
+			CompilationUnit cu = JavaUtil.findCompilationUnitInProject(declaringClass.getQualifiedName());
+			ASTNode node = cu.findDeclaringNode(binding);
+			
+			MethodWrapper wrapper = new MethodWrapper((MethodDeclaration) node);
+			TypeWrapper containingTypeWrapper = findType(cu, typeCache);
+			wrapper.setOwnerType(containingTypeWrapper);
+			
+			calledMemberList.add(wrapper);
+			
+			return false;
+		}
+		
+		public boolean visit(ClassInstanceCreation creation){
+			//TODO similar to the above method
+			return false;
+		}
+		
+		public boolean visit(FieldAccess access){
+			//TODO similar to the above method
+			return false;
+		}
+	}
 
 	private static void readCorrespondingSet(
 			ArrayList<IElement> correspondingSet, Element element) {
@@ -416,26 +463,45 @@ public class DesignXMLReader implements DTDSchema{
 						typeCache.put(e.getAttribute(PROGRAMELEMENT_KEY), tw);
 						
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}else if(PROGRAMELEMENT_TYPE_METHOD.equals(programElementType)){
 					try {
-						ASTNode n = ASTRecover.recover(e.getAttribute(PROGRAMELEMENT_HANDLE), e.getAttribute(PROGRAMELEMENT_KEY));
-						MethodWrapper mw = new MethodWrapper(
-								(MethodDeclaration) n);
 						
-						CompilationUnit cu = (CompilationUnit)n.getRoot();
-						TypeWrapper containingTypeWrapper = findType(cu, typeCache);
-						mw.setOwnerType(containingTypeWrapper);
+						String methodKey = e.getAttribute(PROGRAMELEMENT_HANDLE);
+						ProgramElementWrapper eWrapper = memberCache.get(methodKey);
+						if(eWrapper == null){
+							ASTNode n = ASTRecover.recover(e.getAttribute(PROGRAMELEMENT_HANDLE), e.getAttribute(PROGRAMELEMENT_KEY));
+							MethodWrapper mw = new MethodWrapper(
+									(MethodDeclaration) n);							
+							CompilationUnit cu = (CompilationUnit)n.getRoot();
+							TypeWrapper containingTypeWrapper = findType(cu, typeCache);
+							mw.setOwnerType(containingTypeWrapper);
+							memberCache.put(mw.getKey(), mw);
+							
+							eWrapper = mw;
+						}
 						
-						correspondingSet.add(mw);
+						MethodWrapper mWrapper = (MethodWrapper)eWrapper;
+						correspondingSet.add(mWrapper);
+						
+						MemberRetriever mRetriever = new DesignXMLReader().new MemberRetriever();
+						mWrapper.getMethodDeclaration().accept(mRetriever);
+						
+						for(MemberWrapper wrapper: mRetriever.calledMemberList){
+							mWrapper.addCalleeMember(wrapper);
+							wrapper.addCallerMember(mWrapper);
+							
+							memberCache.put(wrapper.getKey(), wrapper);
+						}
+						
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}else if(PROGRAMELEMENT_TYPE_FIELD.equals(programElementType)){
 					try {
+						//TODO use memberCache to find the field declaration
+						
 						ASTNode n = ASTRecover.recover(e.getAttribute(PROGRAMELEMENT_HANDLE), e.getAttribute(PROGRAMELEMENT_KEY));
 						if(n instanceof VariableDeclaration){
 							n = n.getParent();
@@ -449,7 +515,6 @@ public class DesignXMLReader implements DTDSchema{
 						
 						correspondingSet.add(fw);
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}else{
@@ -486,13 +551,10 @@ public class DesignXMLReader implements DTDSchema{
 			
 			return doc;
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

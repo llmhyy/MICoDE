@@ -1,6 +1,7 @@
 package clonepedia.codegeneration.diagram.bean;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.ASTNode;
