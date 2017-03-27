@@ -153,8 +153,21 @@ public class DesignXMLReader implements DTDSchema{
 	}
 
 	private static void replaceAllTypeMembersWithMemberCache(DesignList designList) {
-		// TODO Auto-generated method stub
-		
+		for(TemplateDesign design: designList){
+			for(Multiset ms: design.getMaterials()){
+				for(IElement element: ms.getCorrespondingSet()){
+					if(element instanceof TypeWrapper){
+						TypeWrapper type = (TypeWrapper)element;
+						for(int i=0; i<type.getMembers().size(); i++){
+							ProgramElementWrapper member = type.getMembers().get(i);
+							ProgramElementWrapper cachedMember = memberCache.get(member.getKey());
+							
+							type.getMembers().set(i, cachedMember);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private static void readDesign(TemplateDesign td, Element designElement) {
