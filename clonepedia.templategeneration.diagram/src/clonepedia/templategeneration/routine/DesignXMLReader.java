@@ -428,50 +428,74 @@ public class DesignXMLReader implements DTDSchema{
 	
 	class MemberRetriever extends ASTVisitor{
 		
-		List<MemberWrapper> calledMemberList;
+		List<MemberWrapper> calledMemberList = new ArrayList<>();
 		
 		public boolean visit(MethodInvocation invocation){
 			IMethodBinding binding = invocation.resolveMethodBinding();
 			ITypeBinding declaringClass = binding.getDeclaringClass();
 			CompilationUnit cu = JavaUtil.findCompilationUnitInProject(declaringClass.getQualifiedName());
-			ASTNode node = cu.findDeclaringNode(binding);
-			
-			MethodWrapper wrapper = new MethodWrapper((MethodDeclaration) node);
-			TypeWrapper containingTypeWrapper = findType(cu, typeCache);
-			wrapper.setOwnerType(containingTypeWrapper);
-			
-			calledMemberList.add(wrapper);
+			if(cu != null){
+				ASTNode node = cu.findDeclaringNode(binding);
+				
+				if(node != null){
+					MethodWrapper wrapper = new MethodWrapper((MethodDeclaration) node);
+					TypeWrapper containingTypeWrapper = findType(cu, typeCache);
+					wrapper.setOwnerType(containingTypeWrapper);
+					
+					calledMemberList.add(wrapper);					
+				}
+				else{
+					System.currentTimeMillis();
+				}
+			}
 			
 			return false;
 		}
 		
 		public boolean visit(ClassInstanceCreation creation){
-			//TODO similar to the above method
 			IMethodBinding binding = creation.resolveConstructorBinding();
 			ITypeBinding declaringClass = binding.getDeclaringClass();
 			CompilationUnit cu = JavaUtil.findCompilationUnitInProject(declaringClass.getQualifiedName());
-			ASTNode node = cu.findDeclaringNode(binding);
-			
-			MethodWrapper wrapper = new MethodWrapper((MethodDeclaration) node);
-			TypeWrapper containingTypeWrapper = findType(cu, typeCache);
-			wrapper.setOwnerType(containingTypeWrapper);
-			
-			calledMemberList.add(wrapper);
+			if(cu != null){
+				ASTNode node = cu.findDeclaringNode(binding);
+				
+				if(node != null){
+					MethodWrapper wrapper = new MethodWrapper((MethodDeclaration) node);
+					TypeWrapper containingTypeWrapper = findType(cu, typeCache);
+					wrapper.setOwnerType(containingTypeWrapper);
+					
+					calledMemberList.add(wrapper);					
+				}
+				else{
+					System.currentTimeMillis();
+				}
+			}
 			return false;
 		}
 		
 		public boolean visit(FieldAccess access){
-			//TODO similar to the above method
 			IVariableBinding binding = access.resolveFieldBinding();
 			ITypeBinding declaringClass = binding.getDeclaringClass();
+			
+			if(declaringClass == null){
+				return true;
+			}
+			
 			CompilationUnit cu = JavaUtil.findCompilationUnitInProject(declaringClass.getQualifiedName());
-			ASTNode node = cu.findDeclaringNode(binding);
-			
-			FieldWrapper wrapper = new FieldWrapper((FieldDeclaration) node);
-			TypeWrapper containingTypeWrapper = findType(cu, typeCache);
-			wrapper.setOwnerType(containingTypeWrapper);
-			
-			calledMemberList.add(wrapper);
+			if(cu != null){
+				ASTNode node = cu.findDeclaringNode(binding);
+				
+				if(node != null){
+					FieldWrapper wrapper = new FieldWrapper((FieldDeclaration) node);
+					TypeWrapper containingTypeWrapper = findType(cu, typeCache);
+					wrapper.setOwnerType(containingTypeWrapper);
+					
+					calledMemberList.add(wrapper);				
+				}
+				else{
+					System.currentTimeMillis();
+				}
+			}
 			return false;
 		}
 	}
