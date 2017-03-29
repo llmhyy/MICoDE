@@ -22,8 +22,11 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.eclipse.jdt.internal.compiler.ast.ConstructorDeclaration;
+import org.eclipse.jdt.internal.compiler.lookup.MethodBinding;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -426,6 +429,71 @@ public class DesignXMLReader implements DTDSchema{
 		}
 	}
 	
+	class FieldFinder extends ASTVisitor{
+		private IVariableBinding binding;
+		FieldDeclaration fieldDeclaration;
+		
+		public FieldFinder(IVariableBinding binding){
+			this.binding = binding;
+		}
+		
+		public boolean visit(FieldDeclaration fd){
+			if(fieldDeclaration != null){
+				return false;
+			}
+			
+			Object obj = fd.fragments().get(0);
+			if(obj instanceof SingleVariableDeclaration){
+				SingleVariableDeclaration svd = (SingleVariableDeclaration)obj;
+				if(svd.getName().getIdentifier().equals(binding.getName())){
+					this.fieldDeclaration = fd;
+				}
+			}
+			
+			return false;
+		}
+	}
+	
+	class MethodFinder extends ASTVisitor{
+		private IMethodBinding binding;
+		MethodDeclaration methodDeclaration;
+		
+		public MethodFinder(IMethodBinding binding){
+			this.binding = binding;
+		}
+		
+		
+		public boolean visit(MethodDeclaration md){
+			if(methodDeclaration != null){
+				return false;
+			}
+			
+			String methodName = md.getName().getFullyQualifiedName();
+			if(methodName.equals(binding.getName())){
+				if(md.parameters().size() == binding.getParameterTypes().length){
+					for(int i=0; i<md.parameters().size(); i++){
+						Object obj = md.parameters().get(i);
+						if(obj instanceof SingleVariableDeclaration){
+							SingleVariableDeclaration svd = (SingleVariableDeclaration)obj;
+							String paramType1 = svd.getType().toString();
+							String paramType2 = binding.getParameterTypes()[i].getName();
+							
+							if(!paramType1.equals(paramType2)){
+								return true;
+							}
+						}
+					}
+					
+					this.methodDeclaration = md;
+				}
+			}
+			
+			
+			return false;
+		}
+	}
+	
+	
 	class MemberRetriever extends ASTVisitor{
 		
 		List<MemberWrapper> calledMemberList = new ArrayList<>();
@@ -435,12 +503,16 @@ public class DesignXMLReader implements DTDSchema{
 			ITypeBinding declaringClass = binding.getDeclaringClass();
 			CompilationUnit cu = JavaUtil.findCompilationUnitInProject(declaringClass.getQualifiedName());
 			if(cu != null){
-				ASTNode node = cu.findDeclaringNode(binding);
-				
+//				ASTNode node = cu.findDeclaringNode(binding);
+				MethodFinder finder = new MethodFinder(binding);
+				cu.accept(finder);
+				MethodDeclaration node = finder.methodDeclaration;
 				if(node != null){
 					MethodWrapper wrapper = new MethodWrapper((MethodDeclaration) node);
 					TypeWrapper containingTypeWrapper = findType(cu, typeCache);
 					wrapper.setOwnerType(containingTypeWrapper);
+					
+//					System.currentTimeMillis();
 					
 					calledMemberList.add(wrapper);					
 				}
@@ -457,7 +529,10 @@ public class DesignXMLReader implements DTDSchema{
 			ITypeBinding declaringClass = binding.getDeclaringClass();
 			CompilationUnit cu = JavaUtil.findCompilationUnitInProject(declaringClass.getQualifiedName());
 			if(cu != null){
-				ASTNode node = cu.findDeclaringNode(binding);
+//				ASTNode node = cu.findDeclaringNode(binding);
+				MethodFinder finder = new MethodFinder(binding);
+				cu.accept(finder);
+				MethodDeclaration node = finder.methodDeclaration;
 				
 				if(node != null){
 					MethodWrapper wrapper = new MethodWrapper((MethodDeclaration) node);
@@ -483,7 +558,10 @@ public class DesignXMLReader implements DTDSchema{
 			
 			CompilationUnit cu = JavaUtil.findCompilationUnitInProject(declaringClass.getQualifiedName());
 			if(cu != null){
-				ASTNode node = cu.findDeclaringNode(binding);
+//				ASTNode node = cu.findDeclaringNode(binding);
+				FieldFinder finder = new FieldFinder(binding);
+				cu.accept(finder);
+				FieldDeclaration node = finder.fieldDeclaration;
 				
 				if(node != null){
 					FieldWrapper wrapper = new FieldWrapper((FieldDeclaration) node);
@@ -615,6 +693,13 @@ public class DesignXMLReader implements DTDSchema{
 			if(oCU.equals(cu)){
 				return typeWrapper;
 			}
+		}
+		
+		ASTNode node = (ASTNode) cu.types().get(0);
+		if(node instanceof TypeDeclaration){
+			TypeWrapper typeWrapper = new TypeWrapper((TypeDeclaration)node);
+			typeCache.put(typeWrapper.getKey(), typeWrapper);
+			return typeWrapper;
 		}
 		
 		return null;

@@ -9,7 +9,11 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -39,6 +43,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
@@ -139,20 +144,40 @@ public class ReusableDesignView extends ViewPart {
 
 		Action loadAction = new Action("load data") {
 			public void run() {
-				String templateFileLocation = AutoGenCTSettings.retrieveTemplateFileLocation();
 				
-				DesignList designs = DesignXMLReader
-						.xml2design(templateFileLocation);
-				AutoGenCTSettings.designs = designs;
-				// viewer.setInput(designs);
-				/*for(TemplateDesign d: designs){
-					System.out.println(d.getName());
-					System.currentTimeMillis();
-				}*/
-				printTemplateMetrics(designs);
 				
-				viewer.setInput(AutoGenCTSettings.designs);
-				viewer.refresh();
+				
+				Job job = new Job("building template"){
+					protected IStatus run(IProgressMonitor monitor) {	
+						String templateFileLocation = AutoGenCTSettings.retrieveTemplateFileLocation();
+						
+						DesignList designs = DesignXMLReader
+								.xml2design(templateFileLocation);
+						AutoGenCTSettings.designs = designs;
+						// viewer.setInput(designs);
+						/*for(TemplateDesign d: designs){
+							System.out.println(d.getName());
+							System.currentTimeMillis();
+						}*/
+						printTemplateMetrics(designs);
+						
+						Display.getDefault().asyncExec(new Runnable() {
+							
+							@Override
+							public void run() {
+								viewer.setInput(AutoGenCTSettings.designs);
+								viewer.refresh();
+								
+							}
+						});
+						
+						
+						return Status.OK_STATUS;
+					}
+				};
+				job.schedule();
+				
+				
 			}
 		};
 		loadAction.setImageDescriptor(Activator.getDefault().getImageRegistry()
