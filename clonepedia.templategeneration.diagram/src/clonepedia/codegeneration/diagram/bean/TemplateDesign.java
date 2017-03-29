@@ -358,7 +358,7 @@ public class TemplateDesign implements Serializable{
 						
 					List<TypeWrapper> instance = new ArrayList<TypeWrapper>();
 					int pos = 0;
-					for (instance.add(tw), visited.add(tw);pos < instance.size();){
+					for (instance.add(tw), visited.add(tw);pos < instance.size();pos++){
 
 						for (ProgramElementWrapper pew : instance.get(pos).getMembers()){
 							if (pew instanceof MethodWrapper){

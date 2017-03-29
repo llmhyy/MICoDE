@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -446,11 +447,31 @@ public class DesignXMLReader implements DTDSchema{
 		
 		public boolean visit(ClassInstanceCreation creation){
 			//TODO similar to the above method
+			IMethodBinding binding = creation.resolveConstructorBinding();
+			ITypeBinding declaringClass = binding.getDeclaringClass();
+			CompilationUnit cu = JavaUtil.findCompilationUnitInProject(declaringClass.getQualifiedName());
+			ASTNode node = cu.findDeclaringNode(binding);
+			
+			MethodWrapper wrapper = new MethodWrapper((MethodDeclaration) node);
+			TypeWrapper containingTypeWrapper = findType(cu, typeCache);
+			wrapper.setOwnerType(containingTypeWrapper);
+			
+			calledMemberList.add(wrapper);
 			return false;
 		}
 		
 		public boolean visit(FieldAccess access){
 			//TODO similar to the above method
+			IVariableBinding binding = access.resolveFieldBinding();
+			ITypeBinding declaringClass = binding.getDeclaringClass();
+			CompilationUnit cu = JavaUtil.findCompilationUnitInProject(declaringClass.getQualifiedName());
+			ASTNode node = cu.findDeclaringNode(binding);
+			
+			FieldWrapper wrapper = new FieldWrapper((FieldDeclaration) node);
+			TypeWrapper containingTypeWrapper = findType(cu, typeCache);
+			wrapper.setOwnerType(containingTypeWrapper);
+			
+			calledMemberList.add(wrapper);
 			return false;
 		}
 	}
@@ -514,19 +535,38 @@ public class DesignXMLReader implements DTDSchema{
 				}else if(PROGRAMELEMENT_TYPE_FIELD.equals(programElementType)){
 					try {
 						//TODO use memberCache to find the field declaration
-						
-						ASTNode n = ASTRecover.recover(e.getAttribute(PROGRAMELEMENT_HANDLE), e.getAttribute(PROGRAMELEMENT_KEY));
-						if(n instanceof VariableDeclaration){
-							n = n.getParent();
+						String fieldKey = e.getAttribute(PROGRAMELEMENT_HANDLE);
+						ProgramElementWrapper eWrapper = memberCache.get(fieldKey);
+						if (eWrapper == null){
+							ASTNode n = ASTRecover.recover(e.getAttribute(PROGRAMELEMENT_HANDLE), e.getAttribute(PROGRAMELEMENT_KEY));
+							if(n instanceof VariableDeclaration){
+								n = n.getParent();
+							}
+							FieldDeclaration fd = (FieldDeclaration)n;
+							FieldWrapper fw = new FieldWrapper(fd);
+							
+							CompilationUnit cu = (CompilationUnit)n.getRoot();
+							TypeWrapper containingTypeWrapper = findType(cu, typeCache);
+							fw.setOwnerType(containingTypeWrapper);
+							
+							eWrapper = (FieldWrapper) fw;
 						}
-						FieldDeclaration fd = (FieldDeclaration)n;
-						FieldWrapper fw = new FieldWrapper(fd);
 						
-						CompilationUnit cu = (CompilationUnit)n.getRoot();
-						TypeWrapper containingTypeWrapper = findType(cu, typeCache);
-						fw.setOwnerType(containingTypeWrapper);
+						FieldWrapper fWrapper = (FieldWrapper) eWrapper;
 						
-						correspondingSet.add(fw);
+						correspondingSet.add(fWrapper);
+						
+						MemberRetriever mRetriever = new DesignXMLReader().new MemberRetriever();
+						fWrapper.getFieldDeclaration().accept(mRetriever);
+						
+						for (MemberWrapper wrapper : mRetriever.calledMemberList){
+							fWrapper.addCalleeMember(wrapper);
+							wrapper.addCallerMember(fWrapper);
+							
+							memberCache.put(wrapper.getKey(), wrapper);
+						}
+						
+						
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
