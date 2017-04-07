@@ -604,32 +604,39 @@ public class DesignXMLReader implements DTDSchema{
 				}else if(PROGRAMELEMENT_TYPE_METHOD.equals(programElementType)){
 					try {
 						
-						String methodKey = e.getAttribute(PROGRAMELEMENT_HANDLE);
+						String methodKey = e.getAttribute(PROGRAMELEMENT_KEY);
 						ProgramElementWrapper eWrapper = memberCache.get(methodKey);
 						if(eWrapper == null){
 							ASTNode n = ASTRecover.recover(e.getAttribute(PROGRAMELEMENT_HANDLE), e.getAttribute(PROGRAMELEMENT_KEY));
 							MethodWrapper mw = new MethodWrapper(
-									(MethodDeclaration) n);							
+									(MethodDeclaration) n);		
+							
+							if(mw.getMethodName().equals("beginEdit")){
+								System.currentTimeMillis();
+							}
+							
 							CompilationUnit cu = (CompilationUnit)n.getRoot();
 							TypeWrapper containingTypeWrapper = findType(cu, typeCache);
 							mw.setOwnerType(containingTypeWrapper);
 							memberCache.put(mw.getKey(), mw);
 							
 							eWrapper = mw;
-						}
-						
-						MethodWrapper mWrapper = (MethodWrapper)eWrapper;
-						correspondingSet.add(mWrapper);
-						
-						MemberRetriever mRetriever = new DesignXMLReader().new MemberRetriever();
-						mWrapper.getMethodDeclaration().accept(mRetriever);
-						
-						for(MemberWrapper wrapper: mRetriever.calledMemberList){
-							mWrapper.addCalleeMember(wrapper);
-							wrapper.addCallerMember(mWrapper);
 							
-							memberCache.put(wrapper.getKey(), wrapper);
+							MethodWrapper mWrapper = (MethodWrapper)eWrapper;
+							correspondingSet.add(mWrapper);
+							
+							MemberRetriever mRetriever = new DesignXMLReader().new MemberRetriever();
+							mWrapper.getMethodDeclaration().accept(mRetriever);
+							
+							for(MemberWrapper wrapper: mRetriever.calledMemberList){
+								mWrapper.addCalleeMember(wrapper);
+								wrapper.addCallerMember(mWrapper);
+								
+								memberCache.put(wrapper.getKey(), wrapper);
+							}
 						}
+						
+						
 						
 					} catch (Exception e1) {
 						e1.printStackTrace();
@@ -637,7 +644,7 @@ public class DesignXMLReader implements DTDSchema{
 				}else if(PROGRAMELEMENT_TYPE_FIELD.equals(programElementType)){
 					try {
 						//TODO use memberCache to find the field declaration
-						String fieldKey = e.getAttribute(PROGRAMELEMENT_HANDLE);
+						String fieldKey = e.getAttribute(PROGRAMELEMENT_KEY);
 						ProgramElementWrapper eWrapper = memberCache.get(fieldKey);
 						if (eWrapper == null){
 							ASTNode n = ASTRecover.recover(e.getAttribute(PROGRAMELEMENT_HANDLE), e.getAttribute(PROGRAMELEMENT_KEY));
@@ -652,21 +659,23 @@ public class DesignXMLReader implements DTDSchema{
 							fw.setOwnerType(containingTypeWrapper);
 							
 							eWrapper = (FieldWrapper) fw;
-						}
-						
-						FieldWrapper fWrapper = (FieldWrapper) eWrapper;
-						
-						correspondingSet.add(fWrapper);
-						
-						MemberRetriever mRetriever = new DesignXMLReader().new MemberRetriever();
-						fWrapper.getFieldDeclaration().accept(mRetriever);
-						
-						for (MemberWrapper wrapper : mRetriever.calledMemberList){
-							fWrapper.addCalleeMember(wrapper);
-							wrapper.addCallerMember(fWrapper);
 							
-							memberCache.put(wrapper.getKey(), wrapper);
+							FieldWrapper fWrapper = (FieldWrapper) eWrapper;
+							
+							correspondingSet.add(fWrapper);
+							
+							MemberRetriever mRetriever = new DesignXMLReader().new MemberRetriever();
+							fWrapper.getFieldDeclaration().accept(mRetriever);
+							
+							for (MemberWrapper wrapper : mRetriever.calledMemberList){
+								fWrapper.addCalleeMember(wrapper);
+								wrapper.addCallerMember(fWrapper);
+								
+								memberCache.put(wrapper.getKey(), wrapper);
+							}
 						}
+						
+						
 						
 						
 					} catch (Exception e1) {
