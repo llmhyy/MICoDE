@@ -363,7 +363,10 @@ public class TemplateDesign implements Serializable{
 						for (ProgramElementWrapper pew : instance.get(pos).getMembers()){
 							if (pew instanceof MethodWrapper){
 								MethodWrapper mw = (MethodWrapper) pew;
-									
+								if(mw.getMethodName().equals("beginEdit")){
+									System.currentTimeMillis();
+								}
+								
 								for (MemberWrapper callee : mw.getCalleeMembers()){
 									if (members.contains(callee)){
 										TypeWrapper owner = callee.getOwnerType();

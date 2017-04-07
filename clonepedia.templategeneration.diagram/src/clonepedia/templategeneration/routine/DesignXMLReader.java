@@ -603,15 +603,20 @@ public class DesignXMLReader implements DTDSchema{
 					}
 				}else if(PROGRAMELEMENT_TYPE_METHOD.equals(programElementType)){
 					try {
+//						memberCache.clear();
 						
 						String methodKey = e.getAttribute(PROGRAMELEMENT_KEY);
+						if(methodKey.contains("beginEdit") && methodKey.contains("TextCreationTool")){
+							System.currentTimeMillis();
+						}
+						
 						ProgramElementWrapper eWrapper = memberCache.get(methodKey);
 						if(eWrapper == null){
 							ASTNode n = ASTRecover.recover(e.getAttribute(PROGRAMELEMENT_HANDLE), e.getAttribute(PROGRAMELEMENT_KEY));
 							MethodWrapper mw = new MethodWrapper(
 									(MethodDeclaration) n);		
 							
-							if(mw.getMethodName().equals("beginEdit")){
+							if(mw.getMethodName().equals("beginEdit") /*&& mw.getLocation().contains("TextCreationTool")*/){
 								System.currentTimeMillis();
 							}
 							
