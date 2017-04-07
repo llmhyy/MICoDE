@@ -169,7 +169,7 @@ public class MethodWrapper extends MemberWrapper{
 		// Compare the name of owner class name, method name, method return type, and method parameters
 		return this.getOwnerType().equalContent(that.getOwnerType()) 
 				&& isReturnTypeEqual
-				&& this.methodDeclaration.getName().equals(that.methodDeclaration.getName())
-				&& new HashSet<>(this.methodDeclaration.parameters()).equals(new HashSet<>(that.methodDeclaration.parameters()));
+				&& this.methodDeclaration.getName().toString().equals(that.methodDeclaration.getName().toString())
+				&& new HashSet<>(this.methodDeclaration.typeParameters()).equals(new HashSet<>(that.methodDeclaration.typeParameters()));
 	}
 }
