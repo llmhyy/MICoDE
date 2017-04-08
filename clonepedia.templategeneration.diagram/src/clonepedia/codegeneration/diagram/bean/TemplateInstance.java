@@ -1,6 +1,7 @@
 package clonepedia.codegeneration.diagram.bean;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class TemplateInstance {
@@ -25,4 +26,14 @@ public class TemplateInstance {
 	public void addTopType(TypeWrapper type){
 		this.topTypeWrapperList.add(type);
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if (!(obj instanceof TemplateInstance))
+			return false;
+		HashSet<TypeWrapper> set1 = new HashSet<TypeWrapper>(topTypeWrapperList);
+		HashSet<TypeWrapper> set2 = new HashSet<TypeWrapper>(((TemplateInstance)obj).getTopTypeWrapperList());
+		return set1.equals(set2);
+	}
+	
 }

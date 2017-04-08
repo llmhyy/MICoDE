@@ -326,7 +326,6 @@ public class TemplateDesign implements Serializable{
 		 */
 		
 		List<TemplateInstance> instances = new ArrayList<>();
-		int len = this.materials.size();	
 		System.out.println("#########################################################");
 		
 		List<TypeWrapper> clazz = new ArrayList<TypeWrapper>();
@@ -363,9 +362,6 @@ public class TemplateDesign implements Serializable{
 						for (ProgramElementWrapper pew : instance.get(pos).getMembers()){
 							if (pew instanceof MethodWrapper){
 								MethodWrapper mw = (MethodWrapper) pew;
-								if(mw.getMethodName().equals("beginEdit")){
-									System.currentTimeMillis();
-								}
 								
 								for (MemberWrapper callee : mw.getCalleeMembers()){
 									if (members.contains(callee)){
@@ -388,8 +384,20 @@ public class TemplateDesign implements Serializable{
 						}
 					}
 					
-					if (instance.size() > 1)
-						instances.add(new TemplateInstance(instance));
+					if (instance.size() > 1){
+						boolean found = false;
+						for (TemplateInstance tmp : instances){
+							HashSet<TypeWrapper> set1 = new HashSet<TypeWrapper>(tmp.getTopTypeWrapperList());
+							HashSet<TypeWrapper> set2 = new HashSet<TypeWrapper>(instance);
+							if (set1.equals(set2)){
+								found = true;
+								break;
+							}
+						}
+						if (!found){
+							instances.add(new TemplateInstance(instance));
+						}
+					}
 				}
 			}
 			

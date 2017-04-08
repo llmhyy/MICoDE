@@ -164,9 +164,19 @@ public class DesignXMLReader implements DTDSchema{
 						TypeWrapper type = (TypeWrapper)element;
 						for(int i=0; i<type.getMembers().size(); i++){
 							ProgramElementWrapper member = type.getMembers().get(i);
+							
+							if(member instanceof MethodWrapper){
+								MethodWrapper m = (MethodWrapper)member;
+								if(m.getMethodName().equals("beginEdit")){
+									System.currentTimeMillis();
+								}
+							}
+							
 							ProgramElementWrapper cachedMember = memberCache.get(member.getKey());
 							
-							type.getMembers().set(i, cachedMember);
+							if(cachedMember != null){
+								type.getMembers().set(i, cachedMember);
+							}
 						}
 					}
 				}
@@ -593,10 +603,16 @@ public class DesignXMLReader implements DTDSchema{
 				if(PROGRAMELEMENT_TYPE_TYPE.equals(programElementType)){
 					try {
 						ASTNode n = ASTRecover.recover(e.getAttribute(PROGRAMELEMENT_HANDLE), e.getAttribute(PROGRAMELEMENT_KEY));
-						TypeWrapper tw = new TypeWrapper((TypeDeclaration)n);
-						correspondingSet.add(tw);
+//						TypeWrapper tw = new TypeWrapper((TypeDeclaration)n);
 						
-						typeCache.put(e.getAttribute(PROGRAMELEMENT_KEY), tw);
+						TypeWrapper cachedType = typeCache.get(e.getAttribute(PROGRAMELEMENT_KEY));
+						if(cachedType == null){
+							cachedType = new TypeWrapper((TypeDeclaration)n);;
+						}
+						typeCache.put(e.getAttribute(PROGRAMELEMENT_KEY), cachedType);
+						
+						correspondingSet.add(cachedType);
+						
 						
 					} catch (Exception e1) {
 						e1.printStackTrace();
@@ -606,7 +622,7 @@ public class DesignXMLReader implements DTDSchema{
 //						memberCache.clear();
 						
 						String methodKey = e.getAttribute(PROGRAMELEMENT_KEY);
-						if(methodKey.contains("beginEdit") && methodKey.contains("TextCreationTool")){
+						if(methodKey.contains("getTool") /*&& methodKey.contains("TextAreaTool")*/){
 							System.currentTimeMillis();
 						}
 						
@@ -614,11 +630,7 @@ public class DesignXMLReader implements DTDSchema{
 						if(eWrapper == null){
 							ASTNode n = ASTRecover.recover(e.getAttribute(PROGRAMELEMENT_HANDLE), e.getAttribute(PROGRAMELEMENT_KEY));
 							MethodWrapper mw = new MethodWrapper(
-									(MethodDeclaration) n);		
-							
-							if(mw.getMethodName().equals("beginEdit") /*&& mw.getLocation().contains("TextCreationTool")*/){
-								System.currentTimeMillis();
-							}
+									(MethodDeclaration) n);
 							
 							CompilationUnit cu = (CompilationUnit)n.getRoot();
 							TypeWrapper containingTypeWrapper = findType(cu, typeCache);
@@ -626,23 +638,31 @@ public class DesignXMLReader implements DTDSchema{
 							memberCache.put(mw.getKey(), mw);
 							
 							eWrapper = mw;
-							
-							MethodWrapper mWrapper = (MethodWrapper)eWrapper;
-							correspondingSet.add(mWrapper);
-							
-							MemberRetriever mRetriever = new DesignXMLReader().new MemberRetriever();
-							mWrapper.getMethodDeclaration().accept(mRetriever);
-							
-							for(MemberWrapper wrapper: mRetriever.calledMemberList){
-								mWrapper.addCalleeMember(wrapper);
-								wrapper.addCallerMember(mWrapper);
-								
-								memberCache.put(wrapper.getKey(), wrapper);
-							}
 						}
 						
 						
+						MethodWrapper mWrapper = (MethodWrapper)eWrapper;
+						correspondingSet.add(mWrapper);
 						
+						MemberRetriever mRetriever = new DesignXMLReader().new MemberRetriever();
+						mWrapper.getMethodDeclaration().accept(mRetriever);
+						
+						for(MemberWrapper wrapper: mRetriever.calledMemberList){
+							MemberWrapper w0 = (MemberWrapper) memberCache.get(wrapper.getKey());
+							if(w0 == null){
+								w0 = wrapper;
+								memberCache.put(wrapper.getKey(), w0);		
+							}
+							
+							if(!mWrapper.getCalleeMembers().contains(w0)){
+								mWrapper.addCalleeMember(w0);								
+							}
+							if(!w0.getCallerMembers().contains(mWrapper)){
+								w0.addCallerMember(mWrapper);								
+							}
+							
+							
+						}
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -665,21 +685,38 @@ public class DesignXMLReader implements DTDSchema{
 							
 							eWrapper = (FieldWrapper) fw;
 							
-							FieldWrapper fWrapper = (FieldWrapper) eWrapper;
 							
-							correspondingSet.add(fWrapper);
-							
-							MemberRetriever mRetriever = new DesignXMLReader().new MemberRetriever();
-							fWrapper.getFieldDeclaration().accept(mRetriever);
-							
-							for (MemberWrapper wrapper : mRetriever.calledMemberList){
-								fWrapper.addCalleeMember(wrapper);
-								wrapper.addCallerMember(fWrapper);
-								
-								memberCache.put(wrapper.getKey(), wrapper);
-							}
 						}
+						FieldWrapper fWrapper = (FieldWrapper) eWrapper;
 						
+						correspondingSet.add(fWrapper);
+						
+						MemberRetriever mRetriever = new DesignXMLReader().new MemberRetriever();
+						fWrapper.getFieldDeclaration().accept(mRetriever);
+						
+						for (MemberWrapper wrapper : mRetriever.calledMemberList){
+							MemberWrapper w0 = (MemberWrapper) memberCache.get(wrapper.getKey());
+							if(w0 == null){
+								w0 = wrapper;
+								memberCache.put(wrapper.getKey(), w0);								
+							}
+							
+							if(!fWrapper.getCalleeMembers().contains(w0)){
+								fWrapper.addCalleeMember(w0);								
+							}
+							if(!w0.getCallerMembers().contains(fWrapper)){
+								w0.addCallerMember(fWrapper);								
+							}
+							
+//							if(!fWrapper.getCallerMembers().contains(wrapper)){
+//								fWrapper.addCalleeMember(wrapper);								
+//							}
+//							if(!wrapper.getCallerMembers().contains(fWrapper)){
+//								wrapper.addCallerMember(fWrapper);
+//							}
+//							
+//							memberCache.put(wrapper.getKey(), wrapper);
+						}
 						
 						
 						
@@ -700,19 +737,35 @@ public class DesignXMLReader implements DTDSchema{
 	}
 
 	private static TypeWrapper findType(CompilationUnit cu, Map<String, TypeWrapper> typeCache) {
-		for(TypeWrapper typeWrapper: typeCache.values()){
-			ASTNode node = typeWrapper.getCorrespondingASTNode();
-			CompilationUnit oCU = (CompilationUnit) node.getRoot();
+//		for(TypeWrapper typeWrapper: typeCache.values()){
+//			ASTNode node = typeWrapper.getCorrespondingASTNode();
+//			CompilationUnit oCU = (CompilationUnit) node.getRoot();
+//			
+//			if(oCU.equals(cu)){
+//				return typeWrapper;
+//			}
+//		}
+//		ASTNode node = (ASTNode) cu.types().get(0);
+//		if(node instanceof TypeDeclaration){
+//			TypeWrapper typeWrapper = new TypeWrapper((TypeDeclaration)node);
+//			typeCache.put(typeWrapper.getKey(), typeWrapper);
+//			return typeWrapper;
+//		}
+//		
+//		return null;
+
+		Object obj = cu.types().get(0);
+		if(obj instanceof TypeDeclaration){
+			TypeDeclaration td = (TypeDeclaration)obj;
+			String key = td.resolveBinding().getKey();
 			
-			if(oCU.equals(cu)){
-				return typeWrapper;
+			TypeWrapper typeWrapper = typeCache.get(key);
+			if(typeWrapper == null){
+				typeWrapper = new TypeWrapper(td);
 			}
-		}
-		
-		ASTNode node = (ASTNode) cu.types().get(0);
-		if(node instanceof TypeDeclaration){
-			TypeWrapper typeWrapper = new TypeWrapper((TypeDeclaration)node);
+			
 			typeCache.put(typeWrapper.getKey(), typeWrapper);
+			
 			return typeWrapper;
 		}
 		
