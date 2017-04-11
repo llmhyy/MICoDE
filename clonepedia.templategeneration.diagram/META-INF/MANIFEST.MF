@@ -7,7 +7,8 @@ Bundle-ClassPath: .,
  lib/org.eclipse.core.filesystem_1.4.0.v20130514-1240.jar,
  lib/jccd-1.0.6.jar,
  lib/log4j-1.2.8.jar,
- lib/antlr-3.0.1.jar
+ lib/antlr-3.0.1.jar,
+ lib/cltk-0.2.jar
 Bundle-Activator: template_model.diagram.part.Template_generationDiagramEditorPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

@@ -178,99 +178,12 @@ public class TemplateDesign implements Serializable{
 		}
 	}
 
-	/**
-	 * Return the sequence number for the member in a class
-	 * @param sup
-	 * @return
-	 */
-	private ArrayList<int[]> buildGraph(Multiset sup){
-		
-		ArrayList<int[]> graph = new ArrayList<int[]>();
-		
-		for (Multiset sub : sup.getSubMultisetList()){
-			int[] subgraph = new int[sup.size()];
-			for (int i = 0 ; i < subgraph.length; i++)	subgraph[i] = -1;
-			for (IElement ie : sub.getCorrespondingSet()){
-				MemberWrapper mw = (MemberWrapper) ie;
-				int ind = sup.getCorrespondingSet().indexOf(mw.getOwnerType());
-				if (ind > -1){
-					TypeWrapper cla = (TypeWrapper)sup.getCorrespondingSet().get(ind);
-					int num = cla.getMembers().indexOf(mw);
-					if (num > -1){
-						subgraph[ind] = num;
-					}			 
-				}
-			}
-			graph.add(subgraph);
-		}
-		return graph;
-	}
+	
 	public TemplateInstance resolveTemplateInstance2(Multiset ms) {
 		
 		return null;
 	}
-	/**
-	 * Generate template instance for each multiset
-	 * @param ms
-	 * @return
-	 */
-	public TemplateInstance resolveTemplateInstance(Multiset ms) {
-		ArrayList<int[]> graph = buildGraph(ms);
-		
-		//Remove the instance which do not shared with all instances
-		for (int i = 0 ; i < graph.size();){
-			boolean remove = false;
-			for (int j = 0 ; j < graph.get(i).length; j++){
-				if (graph.get(i)[j] == -1){
-					remove = true;
-					break;
-				}
-			}
-			if (remove){
-				graph.remove(i);
-			}else	i++;
-		}
-		
-		TypeWrapper tw = (TypeWrapper) ms.getCorrespondingSet().get(0);
-		int len = tw.getMembers().size();
-		HungarianAlgo<Integer> ha = new HungarianAlgo<Integer>();
-		for (int i = 1; i < ms.size(); i++){
-			TypeWrapper temp = (TypeWrapper) ms.getCorrespondingSet().get(i);
-			Integer[][] matrix = new Integer[len][temp.getMembers().size()];
-			for (int j = 0; j < graph.size(); j++){
-				int a = graph.get(j)[0];
-				int b = graph.get(j)[i];
-				if (a == -1 || b == -1)	continue;
-				matrix[a][b] = matrix[b][a]	= 1;
-			}
-			int[] match = ha.maximalBipartiteGraphMatching(matrix);
-			for (int j = 0; j < len; j++){
-				if(match[j] == -1){
-					//If the j-th element is not in the match list, we remove the associated connection
-					for (int k = 0 ; k < graph.size(); ){
-						if (graph.get(k)[0] != -1){
-							graph.remove(k);
-						}else	k++;
-					}
-				}else{
-					//Remove the connection if not in the match list
-					for (int k = 0 ; k < graph.size(); ) {
-						if (graph.get(k)[i] != match[j]){
-							graph.remove(k);
-						}else	k++;
-					}
-				}
-			}
-		}
-		
-		TemplateInstance ti = new TemplateInstance();
-		for (int i = 0 ; i < ms.size(); i++){
-			TypeWrapper instance = (TypeWrapper) ms.getCorrespondingSet().get(i);
-			ArrayList<Integer> containedMembers = new ArrayList<Integer>();
-			for (int j = 0 ; j < graph.size(); j++)		containedMembers.add(graph.get(j)[i]);
-		}
-		return ti;
-	}
+	
 	
 	/**
 	 * Find if one string exists in an array
