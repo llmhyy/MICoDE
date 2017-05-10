@@ -32,7 +32,7 @@ public class TemplateEvaluator {
 	}
 	
 	public void evaluate(){
-		DesignList designList = AutoGenCTSettings.designs;
+		DesignList designList = DesignXMLReader.xml2design(AutoGenCTSettings.retrieveTemplateFileLocation());
 		for(int i = 0 ; i < designList.size(); i++){
 			TemplateDesign design = designList.get(i);
 			List<TemplateInstance> instanceList = design.resolveTemplateInstance();
@@ -43,8 +43,8 @@ public class TemplateEvaluator {
 			}
 			
 			for(TemplateInstance instance: instanceList){
-				DesignList dl = DesignXMLReader.xml2design(AutoGenCTSettings.retrieveTemplateFileLocation());
-				ArrayList<Multiset> newMaterials = dl.get(i).getMaterials();
+//				DesignList dl = DesignXMLReader.xml2design(AutoGenCTSettings.retrieveTemplateFileLocation());
+				ArrayList<Multiset> newMaterials = designList.get(i).getMaterials();
 				
 				ArrayList<Multiset> remaining = filterOneInstance(newMaterials, instance, instanceList);
 				
@@ -91,6 +91,7 @@ public class TemplateEvaluator {
 		}
 		return allSets;
 	}
+	
 	private Accuracy compare(TemplateDesign newDesign, TemplateInstance instance) {
 		Accuracy acc = new Accuracy();
 		double commonality = countCommonality(newDesign.getMaterials(), instance.getTopTypeWrapperList());
