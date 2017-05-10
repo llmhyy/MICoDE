@@ -101,6 +101,9 @@ public class ReusableDesignView extends ViewPart {
 	}
 	
 	private void printTemplateMetrics(DesignList designs){
+		//There may not exist any design
+		if (designs == null)	return;
+		
 		int sampleSize = 15;
 		
 		System.out.println("Total number of templates of " + AutoGenCTSettings.retrieveTargetProject() + ": " + designs.size());
@@ -109,7 +112,7 @@ public class ReusableDesignView extends ViewPart {
 		double averageFieldNum = 0;
 		double averageInnerClass = 0;
 		
-		for(int i=0; i<sampleSize; i++){
+		for(int i=0; i < sampleSize && i < designs.size(); i++){
 			TemplateDesign design = designs.get(i);
 			averageTypeNum += design.getAbstractTypeNumber();
 			averageMethodNum += design.getAbstractMethodNumber();

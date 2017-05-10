@@ -46,7 +46,9 @@ import clonepedia.codegeneration.diagram.bean.Parameter;
 import clonepedia.codegeneration.diagram.bean.ProgramElementWrapper;
 import clonepedia.codegeneration.diagram.bean.TemplateDesign;
 import clonepedia.codegeneration.diagram.bean.TypeWrapper;
+import clonepedia.filepraser.CloneDetectionFileParser;
 import clonepedia.templategeneration.diagram.util.JavaUtil;
+import template_model.diagram.util.AutoGenCTSettings;
 
 public class DesignXMLReader implements DTDSchema{
 
@@ -108,6 +110,8 @@ public class DesignXMLReader implements DTDSchema{
 		
 		ASTRecover.cleanCache();
 		clearMultisetCache();
+		
+		AutoGenCTSettings.cloneSets = new CloneDetectionFileParser(false, "").getCloneSets();
 		
 		return ret;
 	}

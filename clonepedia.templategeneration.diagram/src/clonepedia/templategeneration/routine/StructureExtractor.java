@@ -57,7 +57,8 @@ public class StructureExtractor {
 		int count = 0;
 		if(resource instanceof IFile){
 			IFile file = (IFile)resource;
-			if(file.getFileExtension().equals("java")){
+			//The file may not has extension. Add this checking for possible exception
+			if(file.getFileExtension() != null && file.getFileExtension().equals("java")){
 				ICompilationUnit iunit = JavaCore.createCompilationUnitFrom(file);
 				TypeWrapper typeWrapper = parseType(iunit);
 				if(typeWrapper != null){

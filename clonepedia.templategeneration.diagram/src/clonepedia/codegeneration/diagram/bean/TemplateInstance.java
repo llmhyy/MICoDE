@@ -36,4 +36,9 @@ public class TemplateInstance {
 		return set1.equals(set2);
 	}
 	
+	@Override
+	public String toString(){
+		return topTypeWrapperList.toString();
+	}
+	
 }

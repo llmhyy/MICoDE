@@ -150,7 +150,7 @@ public class MethodWrapper extends MemberWrapper{
 	
 	@Override
 	public boolean equals(Object element) {
-		if (!(element instanceof MethodWrapper)){
+		if (element == null || !(element instanceof MethodWrapper)){
 			return false;
 		}
 		MethodWrapper that = (MethodWrapper) element;
@@ -167,7 +167,7 @@ public class MethodWrapper extends MemberWrapper{
 		}
 		
 		// Compare the name of owner class name, method name, method return type, and method parameters
-		return this.getOwnerType().equalContent(that.getOwnerType()) 
+		return this.getOwnerType() != null && this.getOwnerType().equalContent(that.getOwnerType()) 
 				&& isReturnTypeEqual
 				&& this.methodDeclaration.getName().toString().equals(that.methodDeclaration.getName().toString())
 				&& new HashSet<>(this.methodDeclaration.typeParameters()).equals(new HashSet<>(that.methodDeclaration.typeParameters()));

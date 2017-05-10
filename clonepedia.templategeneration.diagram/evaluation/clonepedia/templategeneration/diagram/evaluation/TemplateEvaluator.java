@@ -16,6 +16,7 @@ import clonepedia.templategeneration.routine.DesignBuilder;
 import clonepedia.templategeneration.routine.DesignXMLReader;
 import edu.ntu.cltk.algo.HungarianAlgo;
 import edu.ntu.cltk.algo.MunkresAlgo;
+import edu.ntu.cltk.file.FileUtil;
 import template_model.diagram.util.AutoGenCTSettings;
 
 public class TemplateEvaluator {
@@ -42,19 +43,22 @@ public class TemplateEvaluator {
 			}
 			
 			for(TemplateInstance instance: instanceList){
-				
-				ArrayList<Multiset> newMaterials = DesignXMLReader.xml2design(AutoGenCTSettings.retrieveTemplateFileLocation()).get(i).getMaterials();
+				DesignList dl = DesignXMLReader.xml2design(AutoGenCTSettings.retrieveTemplateFileLocation());
+				ArrayList<Multiset> newMaterials = dl.get(i).getMaterials();
 				
 				ArrayList<Multiset> remaining = filterOneInstance(newMaterials, instance, instanceList);
 				
 				DesignList newDesign = new DesignBuilder().buildDesign(remaining);
 				
 				System.out.println("=============================");
+				FileUtil.writeFile("acc.txt", "=============================", "a");
 				for (TemplateDesign td : newDesign){
-					System.out.println(td.toString());
+					FileUtil.writeFile("acc.txt", td.toString() + " | " + instance.toString(), "a");
+					System.out.println(td.toString() + " | " + instance.toString());
 					Accuracy accuracy = compare(td, instance);
 					
 					System.out.println(accuracy);
+					FileUtil.writeFile("acc.txt", accuracy.toString(), "a");
 				}
 				
 			}
@@ -90,13 +94,21 @@ public class TemplateEvaluator {
 	private Accuracy compare(TemplateDesign newDesign, TemplateInstance instance) {
 		Accuracy acc = new Accuracy();
 		double commonality = countCommonality(newDesign.getMaterials(), instance.getTopTypeWrapperList());
+		int numInstance = 0;
+		for (TypeWrapper tw : instance.getTopTypeWrapperList()){
+			numInstance += tw.getMembers().size();
+		}
+		int numMultiset = 0;
+		for (Multiset ms : newDesign.getMaterials()){
+			numMultiset += ms.getSubMultisetList().size();
+		}
 		if (instance.getTopTypeWrapperList().size() != 0){
-			acc.precision = commonality / instance.getTopTypeWrapperList().size();
+			acc.precision = commonality / numInstance;
 		}else{
 			acc.precision = 0;
 		}
 		if (newDesign.getMaterials().size() != 0){
-			acc.recall = commonality / newDesign.getMaterials().size();
+			acc.recall = commonality / numMultiset;
 		}else{
 			acc.recall = 0;
 		}
@@ -142,7 +154,8 @@ public class TemplateEvaluator {
 			for (int j = 0 ; j < types.size(); j++){
 				TypeWrapper tw = types.get(j);
 				//First check if the top IElement is similar
-				if (ms.computeSimilarity(tw) >= AutoGenCTUtil.getThreashold(tw)){	
+				double typeSimilarity = 1/AutoGenCTSettings.retrieveClusteringDistanceThreshold();
+				if (ms.computeSimilarity(tw) >= typeSimilarity){	
 					matrix[i][j] = calSimilarity(ms, tw);					
 				}else{
 					matrix[i][j] = 0;
@@ -162,7 +175,7 @@ public class TemplateEvaluator {
 		for (int i = 0 ; i < m.getSubMultisetList().size(); i++){
 			Multiset sub = m.getSubMultisetList().get(i);
 			for (int j = 0 ; j < tw.getMembers().size(); j++){
-				IElement ie = tw.getMembers().get(i);
+				IElement ie = tw.getMembers().get(j);
 				if (sub.computeSimilarity(ie) >= AutoGenCTUtil.getThreashold(ie)){
 					matrix[i][j] = 1;
 				}else{
