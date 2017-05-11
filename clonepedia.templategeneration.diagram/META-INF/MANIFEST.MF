@@ -8,7 +8,9 @@ Bundle-ClassPath: .,
  lib/jccd-1.0.6.jar,
  lib/log4j-1.2.8.jar,
  lib/antlr-3.0.1.jar,
- lib/cltk-0.2.jar
+ lib/cltk-0.2.jar,
+ lib/hbase-server-0.98.5-hadoop2.jar,
+ lib/hbase-common-0.95.2-hadoop1.jar
 Bundle-Activator: template_model.diagram.part.Template_generationDiagramEditorPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

@@ -200,6 +200,21 @@ public class Multiset implements Serializable, IItem{
 		return all/((double)correspondingSet.size());
 	}
 	
+	public double computeSimilarity2(IElement element){
+		double max = 0;
+		
+		for(IElement ele: correspondingSet){
+			//long t1 = System.currentTimeMillis();
+			double sim = ele.computeSimilarity(element);
+			max = (max < sim)? sim: max;
+			//long t2 = System.currentTimeMillis();
+			//System.out.println(t2-t1);
+			
+		}
+		
+		return max;
+	}
+	
 	public String toString(){
 		return correspondingSet.toString();
 	}

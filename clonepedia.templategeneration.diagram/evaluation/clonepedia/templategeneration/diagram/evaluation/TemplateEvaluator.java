@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.hadoop.hbase.util.MunkresAssignment;
+
 import clonepedia.codegeneration.diagram.bean.DesignList;
 import clonepedia.codegeneration.diagram.bean.IElement;
 import clonepedia.codegeneration.diagram.bean.MemberWrapper;
@@ -44,7 +46,7 @@ public class TemplateEvaluator {
 			
 			for(TemplateInstance instance: instanceList){
 				DesignList dl = DesignXMLReader.xml2design(AutoGenCTSettings.retrieveTemplateFileLocation());
-				ArrayList<Multiset> newMaterials = dl.get(i).getMaterials();
+				ArrayList<Multiset> newMaterials = dl/*designList*/.get(i).getMaterials();
 				
 				ArrayList<Multiset> remaining = filterOneInstance(newMaterials, instance, instanceList);
 				
@@ -96,11 +98,11 @@ public class TemplateEvaluator {
 		double commonality = countCommonality(newDesign.getMaterials(), instance.getTopTypeWrapperList());
 		int numInstance = 0;
 		for (TypeWrapper tw : instance.getTopTypeWrapperList()){
-			numInstance += tw.getMembers().size();
+			numInstance += tw.getMembers().size() + 1;
 		}
 		int numMultiset = 0;
 		for (Multiset ms : newDesign.getMaterials()){
-			numMultiset += ms.getSubMultisetList().size();
+			numMultiset += ms.getSubMultisetList().size() + 1;
 		}
 		if (instance.getTopTypeWrapperList().size() != 0){
 			acc.precision = commonality / numInstance;
@@ -132,14 +134,22 @@ public class TemplateEvaluator {
 	 */
 	private double countCommonality(List<Multiset> materials, List<TypeWrapper> types){
 		Integer[][] matrix = buildSimilarityMatrix(materials, types);
-		double[][] dMatrix = new double[materials.size()][types.size()];
+		float[][] dMatrix = new float[materials.size()][types.size()];
 		for (int i = 0; i < materials.size(); i++){
 			for (int j = 0; j < types.size(); j++){
-				dMatrix[i][j] = matrix[i][j] * 1.0;
+				dMatrix[i][j] = (float) (matrix[i][j] * -1.0);
 			}
 		}
-		MunkresAlgo ma = new MunkresAlgo();
-		return ma.maximalAssignment(dMatrix);		
+		/*MunkresAlgo ma = new MunkresAlgo();*/
+		MunkresAssignment ma = new MunkresAssignment(dMatrix);
+		double sum = 0;
+		int[] match = ma.solve();
+		for (int i = 0 ; i < match.length; i++){
+			if (match[i] != -1){
+				sum += dMatrix[i][match[i]];
+			}
+		}
+		return sum*-1/*ma.maximalAssignment(dMatrix)*/;		
 	}
 	/**
 	 * Build the similarity matrix for TemplateDesign and TemplateInstance
@@ -155,8 +165,10 @@ public class TemplateEvaluator {
 				TypeWrapper tw = types.get(j);
 				//First check if the top IElement is similar
 				double typeSimilarity = 1/AutoGenCTSettings.retrieveClusteringDistanceThreshold();
-				if (ms.computeSimilarity(tw) >= typeSimilarity){	
-					matrix[i][j] = calSimilarity(ms, tw);					
+				//TODO: use the maximal policy to calcuate the similarity between multiset and instance
+				if (ms.computeSimilarity2(tw) >= typeSimilarity){	
+					//+1 counting the similarity between the class and the multiset
+					matrix[i][j] = calSimilarity(ms, tw) + 1;					
 				}else{
 					matrix[i][j] = 0;
 				}
@@ -176,7 +188,8 @@ public class TemplateEvaluator {
 			Multiset sub = m.getSubMultisetList().get(i);
 			for (int j = 0 ; j < tw.getMembers().size(); j++){
 				IElement ie = tw.getMembers().get(j);
-				if (sub.computeSimilarity(ie) >= AutoGenCTUtil.getThreashold(ie)){
+				//Use maximal policy to calcuate the similarity bewteen instance and multiset
+				if (sub.computeSimilarity2(ie) >= AutoGenCTUtil.getThreashold(ie)){
 					matrix[i][j] = 1;
 				}else{
 					matrix[i][j] = 0;
