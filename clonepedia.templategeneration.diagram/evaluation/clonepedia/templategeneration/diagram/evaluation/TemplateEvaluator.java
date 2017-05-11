@@ -34,7 +34,7 @@ public class TemplateEvaluator {
 	}
 	
 	public void evaluate(){
-		DesignList designList = AutoGenCTSettings.designs;
+		DesignList designList = DesignXMLReader.xml2design(AutoGenCTSettings.retrieveTemplateFileLocation());
 		for(int i = 0 ; i < designList.size(); i++){
 			TemplateDesign design = designList.get(i);
 			List<TemplateInstance> instanceList = design.resolveTemplateInstance();
