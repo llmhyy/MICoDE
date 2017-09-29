@@ -14,7 +14,7 @@ Moreover, this plugin depends on three projects:
 2. clonepedia (https://github.com/llmhyy/clonepedia)
 3. datamining (https://github.com/llmhyy/data_mining)
 
-You may kindly important the projects in aforementioned repository first.
+You may kindly import the projects in aforementioned repositories first.
 
 ## Tool Tutorial
 When you run the program successfully, you can see Clonepedia and MICoDE options in Eclipse Preference. Choose the Java project you would like to analyze as follows:
