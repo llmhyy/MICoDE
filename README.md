@@ -16,5 +16,20 @@ Moreover, this plugin depends on three projects:
 
 You may kindly important the projects in aforementioned repository first.
 
+## Tool Tutorial
+When you run the program successfully, you can see Clonepedia and MICoDE options in Eclipse Preference. Choose the Java project you would like to analyze as follows:
 
+![Snapshot of MICoDe](/screenshot/clonepedia_preference.png?raw=true "Snapshot of Microbat")
+![Snapshot of MICoDe](/screenshot/micode_preference.png?raw=true "Snapshot of Microbat")
 
+You need to generate code clone information as follows:
+![Snapshot of MICoDe](/screenshot/detect_clone.png?raw=true "Snapshot of Microbat")
+
+Now you can generate templates as follows:
+![Snapshot of MICoDe](/screenshot/generate_tempalte.png?raw=true "Snapshot of Microbat")
+
+Afterwards, you need to load generated templates:
+![Snapshot of MICoDe](/screenshot/load_template.png?raw=true "Snapshot of Microbat")
+
+You can open the mined templates in the template view:
+![Snapshot of MICoDe](/screenshot/show_graph.png?raw=true "Snapshot of Microbat")
